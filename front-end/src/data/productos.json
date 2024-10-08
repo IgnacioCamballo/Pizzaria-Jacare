@@ -1,0 +1,582 @@
+[
+    {
+        "id": "10",
+        "nombre": "Mussarela Bombinhas",
+        "categoria": "pizzas",
+        "subcategoria": "Clássicas",
+        "ingredientes": "Mussarela, tomate em rodelas, azeitonas, irégano e óleo"
+    },
+    {
+        "id": "11",
+        "nombre": "Mussarela Argenta",
+        "categoria": "pizzas",
+        "subcategoria": "Clássicas",
+        "ingredientes": "Mussarela, azeitonas, orégano e óleo"
+    },
+    {
+        "id": "12",
+        "nombre": "Margerita",
+        "categoria": "pizzas",
+        "subcategoria": "Clássicas",
+        "ingredientes": "Mussarela, tomate em rodelas, manjericao, azeitonas e orégano"
+    },
+    {
+        "id": "13",
+        "nombre": "Milho",
+        "categoria": "pizzas",
+        "subcategoria": "Clássicas",
+        "ingredientes": "Mussarela, milho, azeitonas e orégano"
+    },
+    {
+        "id": "14",
+        "nombre": "Alho e Óleo",
+        "categoria": "pizzas",
+        "subcategoria": "Clássicas",
+        "ingredientes": "Mussarela, alho, óleo, azeitonas e orégano"
+    },
+
+
+
+    {
+        "id": "15",
+        "nombre": "Bacon",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, bacon, azeitonas e orégano"
+    },
+    {
+        "id": "16",
+        "nombre": "Napolis",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, cebola, queijo parmesao, azeitonas e orégano"
+    },
+    {
+        "id": "17",
+        "nombre": "Brócolis",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, brócolis, catupiry, azeitonas, e orégano"
+    },
+    {
+        "id": "18",
+        "nombre": "Palmito",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, palmito, azeitonas e orégano"
+    },
+    {
+        "id": "19",
+        "nombre": "Lombinho",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, lomba canadense, caturipy, azeitonas e orégano"
+    },
+    {
+        "id": "20",
+        "nombre": "Calabresa",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, calabresa, cebola, azeitonas e orégano"
+    },
+    {
+        "id": "21",
+        "nombre": "Frango e catupiry",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, frango, catupiry, azeitonas e orégano"
+    },
+    {
+        "id": "22",
+        "nombre": "Portuguesa",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, presunto, ovo, cebola, azeitonas e orégano"
+    },
+    {
+        "id": "23",
+        "nombre": "Fugazza",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, cebola, azeitonas e orégano"
+    },
+    {
+        "id": "24",
+        "nombre": "Presunto",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, presunto, azeitonas e orégano"
+    },
+    {
+        "id": "25",
+        "nombre": "Tomate con Rúcula",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, tomate, rúcula, azeitonas e orégano"
+    },
+    {
+        "id": "26",
+        "nombre": "Don Pancho",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, salchicha, azeitonas e orégano"
+    },
+    {
+        "id": "27",
+        "nombre": "Napolitana",
+        "categoria": "pizzas",
+        "subcategoria": "Tradicionais",
+        "ingredientes": "Mussarela, tomate, parmesao, azeitonas e orégano"
+    },
+
+
+
+
+    {
+        "id": "28",
+        "nombre": "Milao",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, calabresa, tomate, parmesao, azeitonas e orégano"
+    },
+    {
+        "id": "29",
+        "nombre": "Paulista",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, presunto, ervilha, palmito, ovo, azeitonas e orégano"
+    },
+    {
+        "id": "30",
+        "nombre": "Romana",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, presunto, tomate, parmesao, azeitonas e orégano"
+    },
+    {
+        "id": "31",
+        "nombre": "Quatro Queijos",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, provolone, parmesao, catupiry, azeitonas e orégano"
+    },
+    {
+        "id": "32",
+        "nombre": "Peito de Peru",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, peito de peru, catupiry, azeitonas e orégano"
+    },
+    {
+        "id": "33",
+        "nombre": "Vegetariana",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, brócoli, milho, ervilha, palmito, azeitonas e orégano"
+    },
+    {
+        "id": "34",
+        "nombre": "Atum",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, atum, cebola, azeitonas e orégano"
+    },
+    {
+        "id": "35",
+        "nombre": "Rustica",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, presunto, champignon, azeitonas e orégano"
+    },
+    {
+        "id": "36",
+        "nombre": "Brócolis com Bacon",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, brócolis, bacon, catupiry, azeitonas e orégano"
+    },
+    {
+        "id": "37",
+        "nombre": "Camponesa",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, bacon, cebola, azeitonas e orégano"
+    },
+    {
+        "id": "38",
+        "nombre": "Bombinhas",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, bacon, palmito, azeitonas e orégano"
+    },
+    {
+        "id": "39",
+        "nombre": "Champignon",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, champignon, azeitonas e orégano"
+    },
+    {
+        "id": "40",
+        "nombre": "Hawai",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela, lombo canadense, abacaxi e orégano"
+    },
+    {
+        "id": "41",
+        "nombre": "Fritanga",
+        "categoria": "pizzas",
+        "subcategoria": "Especiais",
+        "ingredientes": "Mussarela e batatas fritas"
+    },
+
+
+
+
+    {
+        "id": "42",
+        "nombre": "Super Fritanga",
+        "categoria": "pizzas",
+        "subcategoria": "Super Especiais",
+        "ingredientes": "Mussarela, Batatas fritas, ovos fritos, bacon, azeitonas e orégano"
+    },
+    {
+        "id": "43",
+        "nombre": "Salchipapa",
+        "categoria": "pizzas",
+        "subcategoria": "Super Especiais",
+        "ingredientes": "Mussarela, batatas fritas, salchicha, azeitonas e orégano"
+    },
+    {
+        "id": "44",
+        "nombre": "Camarão",
+        "categoria": "pizzas",
+        "subcategoria": "Super Especiais",
+        "ingredientes": "Mussarela, camarão, alho e oleo, salsinha, azeitonas e orégano"
+    },
+
+
+
+    {
+        "id": "45",
+        "nombre": "Chocolate Preto",
+        "categoria": "pizzas",
+        "subcategoria": "Pizzas Doce",
+        "ingredientes": "Mussarela e chocolate preto"
+    },
+    {
+        "id": "46",
+        "nombre": "Chocolate Branco",
+        "categoria": "pizzas",
+        "subcategoria": "Pizzas Doce",
+        "ingredientes": "Mussarela e chocolate branco"
+    },
+    {
+        "id": "47",
+        "nombre": "Sensação",
+        "categoria": "pizzas",
+        "subcategoria": "Pizzas Doce",
+        "ingredientes": "Mussarela, chocolate preto, morango"
+    },
+    {
+        "id": "48",
+        "nombre": "Charge",
+        "categoria": "pizzas",
+        "subcategoria": "Pizzas Doce",
+        "ingredientes": "Mussarela, chocolate preto e amendoim"
+    },
+    {
+        "id": "49",
+        "nombre": "Banana",
+        "categoria": "pizzas",
+        "subcategoria": "Pizzas Doce",
+        "ingredientes": "Mussarela, chocolate preto e banana"
+    },
+    {
+        "id": "50",
+        "nombre": "Prestígio",
+        "categoria": "pizzas",
+        "subcategoria": "Pizzas Doce",
+        "ingredientes": "Mussarela, chocolate preto e coco ralado"
+    },
+
+
+
+    {
+        "id": "60",
+        "nombre": "Milanesa com batatas fritas",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 55
+    },
+    {
+        "id": "61",
+        "nombre": "Milanesa Grande com batatas Fritas",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 85
+    },
+    {
+        "id": "62",
+        "nombre": "Milanesa Napolitana com fritas",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 70
+    },
+    {
+        "id": "63",
+        "nombre": "Milanesa Napolitana Grande com fritas",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 100
+    },
+    {
+        "id": "64",
+        "nombre": "Empanadas ARG.Salteñas C/U",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 10
+    },
+    {
+        "id": "65",
+        "nombre": "1 DÚZIA Empanadas ARG. Salteñas",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 110
+    },
+    {
+        "id": "66",
+        "nombre": "Batatas Fritas Media",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 25
+    },
+    {
+        "id": "67",
+        "nombre": "Batatas Fritas Grande",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 40
+    },
+    {
+        "id": "68",
+        "nombre": "Batatas Fritas com bacon e cheddar",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 35
+    },
+    {
+        "id": "69",
+        "nombre": "Batatas Fritas com bacon e cheddar Grande",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 50
+    },
+    {
+        "id": "70",
+        "nombre": "Camarão",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 70
+    },
+    {
+        "id": "71",
+        "nombre": "Lula empanado",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 60
+    },
+    {
+        "id": "72",
+        "nombre": "Isca de Tilapia",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 45
+    },
+    {
+        "id": "73",
+        "nombre": "Porcão do macarrão",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 30
+    },
+    {
+        "id": "74",
+        "nombre": "Porcão do Arroz",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 20
+    },
+    {
+        "id": "75",
+        "nombre": "Salada",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 25
+    },
+    {
+        "id": "76",
+        "nombre": "Tabla de mar Jacaré",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 220
+    },
+    {
+        "id": "77",
+        "nombre": "Frango com batatas",
+        "categoria": "pratos",
+        "subcategoria": "Pratos",
+        "ingredientes": 80
+    },
+
+
+
+    {
+        "id": "80",
+        "nombre": "Schweppes Tonica lata 350 ml",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 8
+    },
+    {
+        "id": "811",
+        "nombre": "Guarana 600ml",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 12
+    },
+    {
+        "id": "812",
+        "nombre": "Coca Cola 600ml",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 12
+    },
+    {
+        "id": "813",
+        "nombre": "Coca Cola Zero 600ml",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 12
+    },
+    {
+        "id": "814",
+        "nombre": "Sprite 600ml",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 12
+    },
+    {
+        "id": "815",
+        "nombre": "Fanta 600ml",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 12
+    },
+    {
+        "id": "821",
+        "nombre": "Guarana 1,5L",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 20
+    },
+    {
+        "id": "822",
+        "nombre": "Coca Cola 1,5L",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 20
+    },
+    {
+        "id": "823",
+        "nombre": "Coca Cola Zero 1,5L",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 20
+    },
+    {
+        "id": "83",
+        "nombre": "Jarra de suco 1L",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 30
+    },
+    {
+        "id": "84",
+        "nombre": "Sprite 2L",
+        "categoria": "bebidas",
+        "subcategoria": "Refri",
+        "ingredientes": 22
+    },
+    {
+        "id": "85",
+        "nombre": "Eisenbahn Pilsen Garrafa 355ml",
+        "categoria": "bebidas",
+        "subcategoria": "Cervejas",
+        "ingredientes": 12
+    },
+    {
+        "id": "86",
+        "nombre": "Heineken Garrafa 330ml",
+        "categoria": "bebidas",
+        "subcategoria": "Cervejas",
+        "ingredientes": 14
+    },
+    {
+        "id": "87",
+        "nombre": "Budweiser Garrafa 330ml",
+        "categoria": "bebidas",
+        "subcategoria": "Cervejas",
+        "ingredientes": 12
+    },
+    {
+        "id": "88",
+        "nombre": "Brahma 600ml",
+        "categoria": "bebidas",
+        "subcategoria": "Cervejas",
+        "ingredientes": 18
+    },
+    {
+        "id": "89",
+        "nombre": "Antarctica Original Garrafa 600ml",
+        "categoria": "bebidas",
+        "subcategoria": "Cervejas",
+        "ingredientes": 20
+    },
+    {
+        "id": "90",
+        "nombre": "Heineken Garrafa 600ml",
+        "categoria": "bebidas",
+        "subcategoria": "Cervejas",
+        "ingredientes": 22
+    },
+    {
+        "id": "91",
+        "nombre": "Agua 500ml",
+        "categoria": "bebidas",
+        "subcategoria": "Aguas",
+        "ingredientes": 5
+    },
+    {
+        "id": "92",
+        "nombre": "Agua com gás 500ml",
+        "categoria": "bebidas",
+        "subcategoria": "Aguas",
+        "ingredientes": 5
+    },
+    {
+        "id": "93",
+        "nombre": "Agua 1,5L",
+        "categoria": "bebidas",
+        "subcategoria": "Aguas",
+        "ingredientes": 10
+    },
+    {
+        "id": "94",
+        "nombre": "Agua com gás 1,5L",
+        "categoria": "bebidas",
+        "subcategoria": "Aguas",
+        "ingredientes": 12
+    }
+]

@@ -1,0 +1,27 @@
+[
+    {
+        "categoria": "Clássicas",
+        "precioGrande": 63,
+        "precioMedia": 54
+    },
+    {
+        "categoria": "Tradicionais",
+        "precioGrande": 70,
+        "precioMedia": 62
+    },
+    {
+        "categoria": "Especiais",
+        "precioGrande": 75,
+        "precioMedia": 69
+    },
+    {
+        "categoria": "Super Especiais",
+        "precioGrande": 85,
+        "precioMedia": 79
+    },
+    {
+        "categoria": "Pizzas Doce",
+        "precioGrande": 70,
+        "precioMedia": 62
+    }
+]

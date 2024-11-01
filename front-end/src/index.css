@@ -44,7 +44,7 @@ body {
   width: max-content;
   font-family: "Inknut Antiqua", serif;
   font-weight: 600;
-  font-size: 60px;
+  font-size: 64px;
 }
 
 .boton_menu {
@@ -600,20 +600,20 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.1s ease;
 }
 
-.facebook svg:hover {
-  width: 42px;
-  height: 42px;
-  transition: .1s ease;
+.facebook:hover .instagram:hover {
+  scale: 1.05;
+  transition-duration: .1s;
 }
 
-.instagram svg:hover {
+/* .instagram svg:hover {
   width: 42px;
   height: 42px;
   transition: .1s ease;
   transform: translate(0.5px);
-}
+} */
 
 @media (max-width: 780px) {
   .contenedor_contacto {

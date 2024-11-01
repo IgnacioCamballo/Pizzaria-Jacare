@@ -29,7 +29,6 @@ const Navegacion = () => {
           <div className="contenedor_nav">
           <div className="home_nav"><a aria-label="ir a home" href="#portada">Home</a></div>
           <div className="menu_nav"><a aria-label="ir a menu" href="#menu">Menu</a></div>
-          {/* <div className="sobre_nav"><a href="#sobre">Sobre nós</a></div> */}
           <div className="contacto_nav"><a aria-label="ir a contacto" href="#contacto">Contacto</a></div>
         </div>
         )}
@@ -47,12 +46,6 @@ const Navegacion = () => {
             >
               <a aria-label="ir a Menu" href="#menu">Menu</a>
             </div>
-            {/* <div 
-              className="sobre_nav"
-              onClick={()=> setDesplegable(false)}
-            >
-              <a href="#sobre">Sobre nós</a>
-            </div> */}
             <div 
               className="contacto_nav"
               onClick={()=> setDesplegable(false)}

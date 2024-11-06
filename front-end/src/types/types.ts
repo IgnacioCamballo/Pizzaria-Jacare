@@ -1,3 +1,5 @@
+import {z} from "zod"
+
 export type item = {
     id: number
     categoria: string
@@ -17,6 +19,35 @@ export type producto = {
     subcategoria: string
     ingredientes: number | string
 }
+
+export const ProductSchema = z.object({
+    _id: z.string(),
+    idNumber: z.number().optional(),
+    name: z.string(),
+    category: z.string(),
+    subcategory: z.string().optional(),
+    ingredients: z.string().optional(),
+    price: z.number(),
+    price2: z.number().optional(),
+    img: z.string().optional()
+})
+
+export const adminProductSchema = z.array(
+    ProductSchema.pick({
+        _id: true,
+        idNumber: true,
+        name: true,
+        category: true,
+        subcategory: true,
+        ingredients: true,
+        price: true,
+        price2: true,
+        img: true
+    })
+)
+
+export type Product = z.infer<typeof ProductSchema>
+export type ProductForm = Pick<Product, "idNumber" | "name" | "category" | "subcategory" | "ingredients" | "price" | "price2" | "img">
 
 export type MenuContextProps = {
     menu: string,

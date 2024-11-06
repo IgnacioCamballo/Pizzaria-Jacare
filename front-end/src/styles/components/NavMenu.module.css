@@ -1,0 +1,67 @@
+.popover {
+    position: relative;
+}
+
+.popover_button {
+    cursor: pointer;
+    display: inline-flex; 
+    padding: 0.25rem; 
+    column-gap: 0.25rem; 
+    align-items: center; 
+    border: 0rem;
+    border-radius: 0.5rem; 
+    background-color: var(--color-button-menu); 
+}
+
+.bars3Icon {
+    width: 2rem;
+    height: 2rem;
+    color: white;
+}
+
+.popover_panel {
+    display: flex; 
+    position: absolute; 
+    top: 3rem;
+    right: 0rem;
+    z-index: 10; 
+    width: 11rem; 
+}
+
+.contenedor_popover {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem; 
+    box-sizing: border-box;
+    border-radius: 0.75rem; 
+    width: 100%; 
+    font-size: medium;
+    font-weight: 600; 
+    background-color: white; 
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+}
+
+.texto_usuario {
+    text-align: center;
+    margin: 0;
+    margin-bottom: 0.75rem;
+}
+
+.texto_boton_menu {
+    padding: 0;
+    padding-block: 0.3rem;
+    text-align: start;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: medium;
+    line-height: normal;
+    color: rgb(50, 50, 50);
+    border: none;
+    background-color: transparent;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+
+}
+
+.texto_boton_menu:hover {
+    color: var(--color-button2-hover);
+}

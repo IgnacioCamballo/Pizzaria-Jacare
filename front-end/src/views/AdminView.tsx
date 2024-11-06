@@ -15,16 +15,13 @@ export default function AdminView() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
+  //gets the products from the database
   const {data, isLoading} = useQuery({
     queryKey: ["products"],
     queryFn: getProducts
   })
   
-  function nameDeletingItem () {
-    const ProductName = data?.find(product => product._id === deletingItem)?.name
-    return ProductName
-  }
-
+  //deletes product from the database
   const {mutate} = useMutation({
     mutationFn: deleteProduct,
     onError: (error) => {
@@ -35,6 +32,12 @@ export default function AdminView() {
       toast.success(data)
     }
   })
+  
+  //gets the name of the item trying to delete
+  function nameDeletingItem () {
+    const ProductName = data?.find(product => product._id === deletingItem)?.name
+    return ProductName
+  }
 
   if(isLoading) return "Cargando..."
 

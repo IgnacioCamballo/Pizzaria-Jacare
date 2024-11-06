@@ -8,7 +8,7 @@ export interface ICategory extends Document {
 
 const CategorySchema: Schema = new Schema({
   name: {type: String, requird: true},
-  order: {type: Number, required: true, default: 0},
+  orderN: {type: Number, required: true, default: 0},
   subCateg: {type: {nameSub: {type: String}, orderNSub: {type:Number, default: 0}}}
 })
 

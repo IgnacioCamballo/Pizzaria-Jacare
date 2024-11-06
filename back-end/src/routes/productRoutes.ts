@@ -45,6 +45,4 @@ router.delete("/:id",
   ProductController.deleteProduct
 )
 
-
-
 export default router

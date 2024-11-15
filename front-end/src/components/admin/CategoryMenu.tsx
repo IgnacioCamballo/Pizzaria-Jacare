@@ -1,35 +1,25 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/20/solid'
-import { Link } from 'react-router-dom'
 import styles from "@/styles/components/NavMenu.module.css"
-
-
-
-export default function NavMenu() {
-
+export default function CategoryMenu() {
   return (
     <Menu>
       <div className={styles.popover}>
-        <MenuButton className={styles.popover_button}>
-          <Bars3Icon className={styles.bars3Icon} />
+        <MenuButton className={styles.menu_button}>
+          <Bars3Icon className={styles.bars3IconBlack} />
         </MenuButton>
 
-        <MenuItems className={styles.popover_panel}>
-          <div className={styles.contenedor_popover}>
-            <p className={styles.texto_usuario}>Hola: Usuario</p>
+        <MenuItems className={styles.popover_panel_menu}>
+          <div className={styles.contenedor_menu}>
+
             <MenuItem>
-              <Link
-                to='/admin/categories'
+              <button
                 className={styles.texto_boton_menu}
-              >Categorías
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <Link
-                to="/admin"
-                className={styles.texto_boton_menu}
-              >Productos
-              </Link>
+                type='button'
+                onClick={() => { }}
+              >
+                Agregar Sub-Categoría
+              </button>
             </MenuItem>
             <MenuItem>
               <button
@@ -37,7 +27,16 @@ export default function NavMenu() {
                 type='button'
                 onClick={() => { }}
               >
-                Cerrar Sesión
+                Editar Categoría
+              </button>
+            </MenuItem>
+            <MenuItem>
+              <button
+                className={styles.texto_boton_menu}
+                type='button'
+                onClick={() => { }}
+              >
+                Eliminar Categoría
               </button>
             </MenuItem>
           </div>

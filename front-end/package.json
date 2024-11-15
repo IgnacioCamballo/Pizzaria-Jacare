@@ -24,13 +24,16 @@
     "react-hook-form": "^7.53.1",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.27.0",
+    "react-sortablejs": "^6.1.4",
     "react-toastify": "^10.0.5",
+    "sortablejs": "^1.15.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^22.8.7",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/sortablejs": "^1.15.8",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

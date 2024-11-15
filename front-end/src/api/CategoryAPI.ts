@@ -3,7 +3,7 @@ import api from "../lib/axios";
 import { adminCategorySchema, Category, CategoryData } from "../types/categoriesTypes";
 
 
-export async function createProduct(formData: CategoryData) {
+export async function createCategory(formData: CategoryData) {
   try {
     const {data} = await api.post("/categories", formData)
     return data
@@ -26,23 +26,23 @@ export async function getCategories() {
   }
 }
 
-// type updateProductProps = {
-//   formData: ProductForm,
-//   productId: Product["_id"]
-// }
+type updateCategoryProps = {
+  formData: CategoryData,
+  categoryId: Category["_id"]
+}
 
-// export async function updateProduct({formData, productId}: updateProductProps) {
-//   try {
-//     const { data } = await api.put<string>(`/products/${productId}`, formData)
-//     return data
-//   } catch (error) {
-//     if(isAxiosError(error) && error.response) {
-//       throw new Error(error.response.data.error)
-//     }
-//   }
-// }
+export async function updateProduct({formData, categoryId}: updateCategoryProps) {
+  try {
+    const { data } = await api.put<string>(`/categories/${categoryId}`, formData)
+    return data
+  } catch (error) {
+    if(isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error)
+    }
+  }
+}
 
-export async function deleteProduct(id: Category["_id"]) {
+export async function deleteCategory(id: Category["_id"]) {
   try {
     const { data } = await api.delete<string>(`/categories/${id}`)
     return data

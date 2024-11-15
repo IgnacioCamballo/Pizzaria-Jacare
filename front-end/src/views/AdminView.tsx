@@ -69,8 +69,8 @@ export default function AdminView() {
                   </p>
                   {product.category === "pizza" ? (
                     <div className={styles.prices}>
-                      <p className={styles.price}>Grande: $R${product.price}</p>
-                      <p className={styles.price}>Media: $R${product.price2}</p>
+                      <p className={styles.price}>Grande: $R{product.price}</p>
+                      <p className={styles.price}>Media: $R{product.price2}</p>
                     </div>
                   ) : 
                   <p className={styles.price}>$R{product.price}</p>

@@ -61,10 +61,10 @@ export class CategoryController {
   }
 
   static deleteCategorie = async (req: Request, res: Response) => {
-    const {categoryId} = req.params
+    const {id} = req.params
 
     try {
-      const category = await Category.findById(categoryId)
+      const category = await Category.findById(id)
 
       if(!category) {
         const error = new Error('Categoría no encontrada')

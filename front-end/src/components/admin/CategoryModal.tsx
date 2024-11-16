@@ -1,24 +1,40 @@
-import React from "react"
+import React, { SetStateAction } from "react"
 
+import styles from "@/styles/views/CategoriesView.module.css"
+
+import Modal from "../Modal"
 
 type AlertModalProps = {
-  children: React.ReactElement,
   onCancel: () => void,
-  onConfirm: () => void,
-  confirmText: string
+  onSubmit: React.FormEventHandler<HTMLFormElement> | undefined,
+  onEdit: (e: { target: { value: SetStateAction<string>; }; }) => void,
+  catEditing: string
 }
 
-export default function CategoryModal({children, onCancel, onConfirm, confirmText}: AlertModalProps) {
+export default function CategoryModal({ onCancel, onSubmit, onEdit, catEditing }: AlertModalProps) {
   return (
-    <div onClick={onCancel} style={{position: "fixed", top: 0, bottom: 0, left: 0, right: 0, backgroundColor: "rgba(89, 96, 107, 0.75)"}}>  
-      <div style={{borderRadius: "0.5rem", backgroundColor: "white", padding: "1.5rem 2rem", position: "absolute", top: "50%", left: "50%", right: "auto", bottom: "auto", transform: "translate(-50%, -50%)"}}>
-        {children}
-        <div style={{display: "flex", justifyContent: "space-around", gap: "1rem"}}>
-          <button style={{width: "5rem"}} onClick={onCancel}>Cancelar</button>
-          <button style={{width: "5rem"}} onClick={onConfirm}>{confirmText}</button>
+    <Modal onCancel={onCancel}>
+      <form className={styles.modal_form} onSubmit={onSubmit}>
+        <label htmlFor="catName">{catEditing ? "Cambia el nombre de la categoría" : "Crea una nueva categoría"}</label>
+        <input
+          id="catName"
+          name="category_name"
+          type="text"
+          defaultValue={catEditing}
+          onChange={onEdit}
+          placeholder="Nombre de Categoría"
+        />
+        <div style={{ display: "flex", justifyContent: "space-around", gap: "1rem" }}>
+          <button className={styles.modal_button} onClick={onCancel}>
+            Cancelar
+          </button>
+
+          <button className={styles.modal_button} type="submit">
+            {catEditing ? "Guardar" : "Crear"}
+          </button>
         </div>
-      </div>
-    </div>
+      </form>
+    </Modal>
   )
 }
 

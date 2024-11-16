@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useQuery, useMutation } from "@tanstack/react-query"
-import { useQueryClient } from "@tanstack/react-query"
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query"
 
 import styles from "@/styles/views/AdminView.module.css"
 import { deleteProduct, getProducts } from "../api/ProductAPI"

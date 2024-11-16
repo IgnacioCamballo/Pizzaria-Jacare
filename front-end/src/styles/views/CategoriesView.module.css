@@ -100,3 +100,17 @@
   color: var(--color-letras1);
   transform: translateY(-0.25rem);
 }
+
+.modal_form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: x-large;
+  font-weight: 500;
+  color: var(--color-letras1);
+}
+
+.modal_button {
+  width: 5rem;
+  cursor: pointer;
+}

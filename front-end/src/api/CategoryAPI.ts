@@ -31,7 +31,7 @@ type updateCategoryProps = {
   categoryId: Category["_id"]
 }
 
-export async function updateProduct({formData, categoryId}: updateCategoryProps) {
+export async function updateCategory({formData, categoryId}: updateCategoryProps) {
   try {
     const { data } = await api.put<string>(`/categories/${categoryId}`, formData)
     return data

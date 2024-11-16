@@ -1,7 +1,15 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/20/solid'
+
 import styles from "@/styles/components/NavMenu.module.css"
-export default function CategoryMenu() {
+
+type CategoryMenuProps = {
+  onClic1: () => void,
+  onClic2: () => void,
+  onClic3: () => void
+}
+
+export default function CategoryMenu({onClic1, onClic2, onClic3} : CategoryMenuProps) {
   return (
     <Menu>
       <div className={styles.popover}>
@@ -16,7 +24,7 @@ export default function CategoryMenu() {
               <button
                 className={styles.texto_boton_menu}
                 type='button'
-                onClick={() => { }}
+                onClick={onClic1}
               >
                 Agregar Sub-Categoría
               </button>
@@ -25,7 +33,7 @@ export default function CategoryMenu() {
               <button
                 className={styles.texto_boton_menu}
                 type='button'
-                onClick={() => { }}
+                onClick={onClic2}
               >
                 Editar Categoría
               </button>
@@ -34,7 +42,7 @@ export default function CategoryMenu() {
               <button
                 className={styles.texto_boton_menu}
                 type='button'
-                onClick={() => { }}
+                onClick={onClic3}
               >
                 Eliminar Categoría
               </button>

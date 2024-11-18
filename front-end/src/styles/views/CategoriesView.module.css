@@ -110,6 +110,11 @@
   color: var(--color-letras1);
 }
 
+.input {
+  font-size: large;
+  padding: 0.25rem;
+}
+
 .modal_button {
   width: 5rem;
   cursor: pointer;

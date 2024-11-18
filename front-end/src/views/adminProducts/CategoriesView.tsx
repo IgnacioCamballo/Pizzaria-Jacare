@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ReactSortable } from "react-sortablejs";
+import { ReactSortable, Sortable } from "react-sortablejs";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -14,23 +14,15 @@ import CategoryMenu from "../../components/admin/CategoryMenu";
 import CategoryModal from "../../components/admin/CategoryModal";
 import AlertModal from "../../components/admin/AlertModal";
 
-export default function CategoriesView() {
-  const [categoryList, setCategoryList] = useState<Category[]>([])
-  const [showedCat, setShowedCat] = useState<string>("")
-  const [subCatShownList, setSubCatShownList] = useState()
-
+export default function CategoriesView() {  
   const [alertModal, setAlertModal] = useState(false)
+  const [categoryList, setCategoryList] = useState<Category[]>([])
 
   const [catModal, setCatModal] = useState(false)
   const [catEditing, setCatEditing] = useState("")
   const [catEditingId, setCatEditingId] = useState("")
 
-  const [subCatModal, setSubCatModal] = useState(false)
-  const [subCatEditing, setSubCatEditing] = useState("")
-  const [subCatEditingId, setSubCatEditingId] = useState("")
-
   const queryClient = useQueryClient()
-  console.log(categoryList)
 
   //querys for categories
   const queryCreateCategory = useMutation({
@@ -44,7 +36,7 @@ export default function CategoriesView() {
     }
   })
   
-  const {data, isLoading, isSuccess, } = useQuery({
+  const {data, isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories
   })
@@ -61,7 +53,10 @@ export default function CategoriesView() {
   })
 
   const querySortCategories = useMutation({
-    mutationFn: updateCategory
+    mutationFn: updateCategory,
+    onError: (error) => {
+      toast.error(error.message)
+    }
   })
 
   const queryDeleteCategory = useMutation({
@@ -78,16 +73,15 @@ export default function CategoriesView() {
   //categories api handlers
   useEffect (() => {
     if(data) {
-      const SortedData = data.sort(function (cat1, cat2) {return cat1.orderN - cat2.orderN})
+      const SortedData = data.sort((cat1, cat2) => cat1.orderN - cat2.orderN)
       setCategoryList(SortedData)
     }
-  }, [isSuccess])
+  }, [data])
  
   function handleEditingCat(e: { target: { value: SetStateAction<string>; }; }) {
     setCatEditing(e.target.value)
   }
 
-  
   const handleSubmitCat = (e: { preventDefault: () => void; }) => {
     e.preventDefault()
     
@@ -121,30 +115,30 @@ export default function CategoriesView() {
     mutate(catEditingId)
   }
 
-  useEffect(() => {
-    const newCatList = categoryList.map((category, index) => ({
+  async function handleSortCategories (evt: Sortable.SortableEvent) {
+    const {oldIndex, newIndex} = evt
+    const listCopy = [...categoryList]
+    
+    const [removed] = listCopy.splice(oldIndex!, 1) 
+    listCopy.splice(newIndex!, 0, removed)
+    
+    const newCatList = listCopy.map((category, index) => ({
       ...category,
       orderN: index
     }))
+    
+    const updatePromises = newCatList.map(category => {
+      const formData = { name: category.name, orderN: category.orderN };
+      const data = { formData, categoryId: category._id };
+      return querySortCategories.mutateAsync(data);
+    });
 
-    const {mutate} = querySortCategories
-
-    newCatList.map(category => {
-      const formData = {name: category.name, orderN: category.orderN}
-      const data = {formData: formData, categoryId: category._id}
-      mutate(data)
-    })
-  }, [categoryList])
-  
-
-  //sets the sub-category to be shown or hide the current one when pressing a categoty arrow
-  const SubCatShowed = (cat: Category) => {
-    if(cat.name === showedCat) {
-      setShowedCat("")
-      setSubCatShownList(undefined)
-    } else {
-      setShowedCat(cat.name)
-      //setSubCatShownList(cat.subCateg)
+    try {
+        await Promise.all(updatePromises);
+        queryClient.invalidateQueries({ queryKey: ["categories"] });
+    } catch (error) {
+        // Manejar errores aquí
+        console.error('Error al actualizar las categorías:', error);
     }
   }
   
@@ -159,7 +153,6 @@ export default function CategoriesView() {
     setCatEditing("") 
     setCatEditingId("")
   }
-
 
   if(isLoading) return "Cargando..."
 
@@ -183,12 +176,13 @@ export default function CategoriesView() {
           dragClass="sortableDrag"
           animation={200}
           easing="ease-out"
+          onEnd={(evt) => handleSortCategories(evt)}
         >
           {categoryList.map(category => 
             <li key={category._id} className={styles.category_container}>
               <div className={styles.category}>
                 <div className={styles.cat_name_side}>
-                  <ArrowSVG className={styles.arrow} onClick={() => SubCatShowed(category)}/>
+                  <ArrowSVG className={styles.arrow} onClick={() => {}}/>
 
                   <h2 className={styles.category_name}>{category.name}</h2>
                 </div>
@@ -198,24 +192,6 @@ export default function CategoriesView() {
                   onClic3={() => {setAlertModal(true), setCatEditingId(category._id)}}
                 />
               </div>
-
-              {/* {showedCat === category.name && 
-                <ReactSortable 
-                  tag="ul" 
-                  className={styles.list_container} 
-                  list={subCatShownList} 
-                  setList={setSubCatShownList}
-                  dragClass="sortableDrag"
-                  animation={200}
-                  easing="ease-out"
-                  >
-                  {subCatShownList!.map(sub =>
-                    <li key={sub.nameSub}>
-                      <h2>{sub.nameSub}</h2>
-                    </li>
-                  )}
-                </ReactSortable>
-              } */}
             </li>
           )}
         </ReactSortable>

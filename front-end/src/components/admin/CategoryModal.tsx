@@ -1,4 +1,4 @@
-import React, { SetStateAction } from "react"
+import React, { SetStateAction, useEffect, useState } from "react"
 
 import styles from "@/styles/views/CategoriesView.module.css"
 
@@ -12,11 +12,18 @@ type AlertModalProps = {
 }
 
 export default function CategoryModal({ onCancel, onSubmit, onEdit, catEditing }: AlertModalProps) {
+  const [message, setmessage] = useState("")
+  
+  useEffect(() => {
+    setmessage(catEditing)
+  }, [])
+
   return (
     <Modal onCancel={onCancel}>
       <form className={styles.modal_form} onSubmit={onSubmit}>
-        <label htmlFor="catName">{catEditing ? "Cambia el nombre de la categoría" : "Crea una nueva categoría"}</label>
+        <label htmlFor="catName">{message ? "Cambia el nombre de la categoría" : "Crea una nueva categoría"}</label>
         <input
+          className={styles.input}
           id="catName"
           name="category_name"
           type="text"
@@ -30,7 +37,7 @@ export default function CategoryModal({ onCancel, onSubmit, onEdit, catEditing }
           </button>
 
           <button className={styles.modal_button} type="submit">
-            {catEditing ? "Guardar" : "Crear"}
+            {message ? "Guardar" : "Crear"}
           </button>
         </div>
       </form>

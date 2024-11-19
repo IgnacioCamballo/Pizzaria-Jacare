@@ -9,10 +9,9 @@ import { createCategory, deleteCategory, getCategories, updateCategory } from ".
 import { Category, CategoryData } from "../../types/categoriesTypes";
 
 //Components
-import ArrowSVG from "../../components/svg/ArrowSVG";
-import CategoryMenu from "../../components/admin/CategoryMenu";
 import CategoryModal from "../../components/admin/CategoryModal";
 import AlertModal from "../../components/admin/AlertModal";
+import CategoryItem from "../../components/admin/CategoryItem";
 
 export default function CategoriesView() {  
   const [alertModal, setAlertModal] = useState(false)
@@ -179,20 +178,13 @@ export default function CategoriesView() {
           onEnd={(evt) => handleSortCategories(evt)}
         >
           {categoryList.map(category => 
-            <li key={category._id} className={styles.category_container}>
-              <div className={styles.category}>
-                <div className={styles.cat_name_side}>
-                  <ArrowSVG className={styles.arrow} onClick={() => {}}/>
-
-                  <h2 className={styles.category_name}>{category.name}</h2>
-                </div>
-                <CategoryMenu 
-                  onClic1={() => {}} 
-                  onClic2={() => {setCatModal(true), setCatEditing(category.name), setCatEditingId(category._id)}} 
-                  onClic3={() => {setAlertModal(true), setCatEditingId(category._id)}}
-                />
-              </div>
-            </li>
+            <CategoryItem 
+            key={category._id}
+            category={category}
+            menuAction1={() => {}}
+            menuAction2={() => {setCatModal(true), setCatEditing(category.name), setCatEditingId(category._id)}}
+            menuAction3={() => {setAlertModal(true), setCatEditingId(category._id)}}
+            />
           )}
         </ReactSortable>
       ) : (

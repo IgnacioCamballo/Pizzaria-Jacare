@@ -68,18 +68,18 @@ export default function AdminView() {
                   </p>
                   {product.category === "pizza" ? (
                     <div className={styles.prices}>
-                      <p className={styles.price}>Grande: $R{product.price}</p>
-                      <p className={styles.price}>Media: $R{product.price2}</p>
+                      <p className={styles.price}>Grande: R$ {product.price}</p>
+                      <p className={styles.price}>Media: R$ {product.price2}</p>
                     </div>
                   ) : 
-                  <p className={styles.price}>$R{product.price}</p>
+                  <p className={styles.price}>R$ {product.price}</p>
                 }
                 </div>
               </div>
 
               <div className={styles.buttons}>
                 <button className={styles.button_edit} onClick={() => {navigate(`/admin/products/${product._id}/edit`)}}>Editar</button>
-                <button className={styles.button_delete} onClick={() => {setDeletingItem(product._id), setAlertModal(true)}}>Eliminar</button>
+                <button className={styles.button_delete} onClick={() => {setDeletingItem(product._id!), setAlertModal(true)}}>Eliminar</button>
               </div>
             </li>
           ))}

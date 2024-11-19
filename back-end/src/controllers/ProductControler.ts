@@ -1,12 +1,24 @@
 import type { Request, Response } from "express"
 import Product from "../models/Product"
+import Category from "../models/Categories"
+import SubCategory from "../models/SubCategories"
 
 export class ProductController {
   static createProduct = async (req: Request, res: Response) => {
     const product = new Product(req.body)
 
     try {
+      const { category, subcategory } = req.body
       await product.save()
+      await Category.findByIdAndUpdate(category, {
+        $push: {products: product._id}
+      })
+      if(subcategory) {
+        await SubCategory.findByIdAndUpdate(subcategory, {
+          $push: {products: product._id}
+        })
+      }
+      
       res.send("Producto creado correctamente")
     } catch (error) {
       console.log(error)

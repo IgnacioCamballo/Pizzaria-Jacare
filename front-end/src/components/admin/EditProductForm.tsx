@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Product, ProductForm } from "../../types/types";
-import ProjectForm from "./ProductForm";
+import ProductsForm from "./ProductsForm";
 import styles from "@/styles/views/ActionsProjectView.module.css"
 import { updateProduct } from "../../api/ProductAPI";
 import { toast } from "react-toastify";
@@ -65,7 +65,7 @@ export default function EditProductForm({data, productId}: EditProductFormProps)
         onSubmit={handleSubmit(handleForm)}
         noValidate
       >
-        <ProjectForm
+        <ProductsForm
           register={register}
           errors={errors}
           watch={watch}

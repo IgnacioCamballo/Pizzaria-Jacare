@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import { ProductForm } from "../../types/types";
 import { createProduct } from "../../api/ProductAPI";
-import ProjectForm from "../../components/admin/ProductForm";
+import ProductsForm from "../../components/admin/ProductsForm";
 import styles from "@/styles/views/ActionsProjectView.module.css"
 
 export default function CreateProductView() {
@@ -15,7 +15,7 @@ export default function CreateProductView() {
     idNumber: 0,
     name: "",
     category: "",
-    subcategory: undefined,
+    subcategory: null,
     ingredients: undefined,
     price: 0,
     price2: 0,
@@ -53,7 +53,7 @@ export default function CreateProductView() {
         onSubmit={handleSubmit(handleForm)}
         noValidate
       >
-        <ProjectForm
+        <ProductsForm
           register={register}
           errors={errors}
           watch={watch}

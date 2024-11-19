@@ -21,11 +21,11 @@ export type producto = {
 }
 
 export const ProductSchema = z.object({
-    _id: z.string(),
+    _id: z.string().optional(),
     idNumber: z.number().optional(),
     name: z.string(),
     category: z.string(),
-    subcategory: z.string().optional(),
+    subcategory: z.string().optional().nullable(),
     ingredients: z.string().optional(),
     price: z.number(),
     price2: z.number().optional(),

@@ -1,10 +1,10 @@
-import mongoose, {Schema, Document} from "mongoose";
+import mongoose, {Schema, Document, Types} from "mongoose";
 
 export interface IProduct extends Document {
   idNumber: number,
   name: string,
-  category: string,
-  subcategory: string,
+  category: Types.ObjectId,
+  subcategory: Types.ObjectId | null,
   ingredients: string,
   price: number,
   price2: number,
@@ -21,13 +21,13 @@ const ProductSchema: Schema = new Schema({
     trim: true
   },
   category: { 
-    type: String, 
-    required: true, 
-    trim: true
+    type: Types.ObjectId, 
+    ref: "Category",
+    required: true
   },
   subcategory: { 
-    type: String, 
-    trim: true
+    type: Types.ObjectId, 
+    ref: "SubCategory"
   },
   ingredients: { 
     type: String, 

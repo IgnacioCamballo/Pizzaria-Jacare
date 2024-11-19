@@ -1,7 +1,12 @@
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
-import ErrorMessage from "./ErrorMessage";
-import { ProductForm } from "../../types/types";
+import { useQuery } from "@tanstack/react-query";
+
 import styles from "@/styles/views/ActionsProjectView.module.css"
+import ErrorMessage from "./ErrorMessage";
+import { getCategories } from "../../api/CategoryAPI";
+
+//Components
+import { ProductForm } from "../../types/types";
 
 type ProjectFormProps = {
   register: UseFormRegister<ProductForm>
@@ -9,8 +14,16 @@ type ProjectFormProps = {
   watch: UseFormWatch<ProductForm>
 }
 
-export default function ProjectForm({ register, errors, watch }: ProjectFormProps) {
-  const ispizza = watch("category") === "pizza"
+export default function ProductsForm({ register, errors, watch }: ProjectFormProps) {
+  const {data} = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories
+  })
+  
+  const ispizza = watch("category") === "673c815cd2ab7e85c67cb972"
+  
+  const actualCategoryId = watch("category")
+  const isSubCat = actualCategoryId === "" ? false : data?.find(category => category._id === actualCategoryId)?.subCategories?.length === (0 && undefined && null)
 
   return (
     <>
@@ -58,9 +71,9 @@ export default function ProjectForm({ register, errors, watch }: ProjectFormProp
           })}
         >
           <option value="">Seleccionar Categoría</option>
-          <option value="pizza">Pizza</option>
-          <option value="prato">Plato</option>
-          <option value="bebida">Bebida</option>
+          {data?.map(category => (
+            <option key={category._id} value={category._id}>{category.name}</option>
+          ))}
         </select>
 
         {errors.category && (
@@ -68,7 +81,7 @@ export default function ProjectForm({ register, errors, watch }: ProjectFormProp
         )}
       </div>
 
-      {ispizza && (
+      {isSubCat && (
         <div className={styles.contenedor_label_input}>
           <label htmlFor="subcategory" className={styles.label}>
             Sub-Categoría
@@ -78,10 +91,9 @@ export default function ProjectForm({ register, errors, watch }: ProjectFormProp
             className={styles.input}
             {...register("subcategory")}
           >
-            <option value="">Seleccionar Sub-Categoría</option>
-            <option value="Clássicas">Clássicas</option>
-            <option value="Tradicionais">Tradicionais</option>
-            <option value="Especiais">Especiais</option>
+            <option value="673c6484d2ab7e85c67cb94e">Clássicas</option>
+            <option value="673c6484d2ab7e85c67cb94e">Tradicionais</option>
+            <option value="673c6484d2ab7e85c67cb94e">Especiais</option>
           </select>
         </div>
       )}

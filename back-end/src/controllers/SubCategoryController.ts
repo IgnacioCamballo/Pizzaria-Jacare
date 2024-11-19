@@ -3,8 +3,9 @@ import SubCategory from "../models/SubCategories"
 
 export class SubCategoryController {
   static createSubCategory = async (req: Request, res: Response) => {
+    const subCat = new SubCategory(req.body)
+    
     try {
-      const subCat = new SubCategory(req.body)
       subCat.category = req.category.id
       req.category.subCategories.push(subCat.id)
       await Promise.allSettled([subCat.save(), req.category.save()])

@@ -54,6 +54,7 @@ export class ProductController {
   
   static updateProduct = async (req: Request, res: Response) => {
     const {id} = req.params
+    const { category, subcategory } = req.body
 
     try {
       const product = await Product.findByIdAndUpdate(id, req.body)
@@ -63,7 +64,25 @@ export class ProductController {
         res.status(404).json({error: error.message})
         return
       }
-
+      //Updates in category.products
+      if(category !== product.category) {
+        await Category.findByIdAndUpdate(product.category, {
+          $pull: {products: id}
+        })
+        await Category.findByIdAndUpdate(category, {
+          $push: {products: id}
+        })
+      }
+      //Updates in SubCategory.products
+      if(subcategory && subcategory !== product.subcategory) {
+        await SubCategory.findByIdAndUpdate(product.subcategory, {
+          $pull: {products: id}
+        })
+        await SubCategory.findByIdAndUpdate(subcategory, {
+          $push: {products: id}
+        })
+      }
+      //Saves update in products
       await product.save()
       res.send("Producto actualizado correctamente")
     } catch (error) {
@@ -83,6 +102,16 @@ export class ProductController {
         return
       }
 
+      const { category, subcategory } = product
+
+      await Category.findByIdAndUpdate(category, {
+        $pull: {products: product._id}
+      })
+      if(subcategory) {
+        await SubCategory.findByIdAndUpdate(subcategory, {
+          $pull: {products: product._id}
+        })
+      }
       await product.deleteOne()
       res.send("Producto eliminado")
     } catch (error) {

@@ -11,6 +11,7 @@ export default function AdminView() {
   const [alertModal, setAlertModal] = useState(false)
   const [deletingItem, setDeletingItem] = useState("")
 
+
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -28,6 +29,8 @@ export default function AdminView() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({queryKey: ["products"]})
+      queryClient.invalidateQueries({queryKey: ["categories"]})
+      queryClient.invalidateQueries({queryKey: ["SubCategory"]})
       toast.success(data)
     }
   })
@@ -63,10 +66,9 @@ export default function AdminView() {
                   <Link to={`/admin/products/${product._id}/edit`}
                     className={styles.nombre_producto}
                     >{product.idNumber !== 0 ? `${product.idNumber}. ` : ""}{product.name}</Link>
-                  <p className={styles.text_info}>
-                    {product.ingredients && `Ingredientes: ${product.ingredients}`}
-                  </p>
-                  {product.category === "pizza" ? (
+                    <p className={styles.text_info}><span className={styles.span}>Categoría: </span>{product.categoryName}</p>
+                  <p className={styles.text_info}><span className={styles.span}>Sub Categoría: </span>{product.subcategoryName}</p>
+                  {product.category === "673c815cd2ab7e85c67cb972" ? (
                     <div className={styles.prices}>
                       <p className={styles.price}>Grande: R$ {product.price}</p>
                       <p className={styles.price}>Media: R$ {product.price2}</p>

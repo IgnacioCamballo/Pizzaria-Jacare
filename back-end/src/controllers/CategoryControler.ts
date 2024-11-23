@@ -1,5 +1,6 @@
 import type { Request, Response } from "express"
 import Category from "../models/Categories"
+import SubCategory from "../models/SubCategories"
 
 
 export class CategoryController {
@@ -72,6 +73,14 @@ export class CategoryController {
         return
       }
 
+      const subCats = category.subCategories
+
+      const deletePromises = subCats.map(subcatId => {
+        const subCatDelete = SubCategory.findByIdAndDelete(subcatId)
+        return subCatDelete
+      })
+
+      await Promise.all(deletePromises)
       await category.deleteOne()
       res.send("Categoría eliminada")
     } catch (error) {

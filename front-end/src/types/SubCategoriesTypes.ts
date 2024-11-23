@@ -19,4 +19,4 @@ export const adminSubCategorySchema = z.array(
 )
 
 export type SubCategory = z.infer<typeof SubCategorySchema>
-export type SubCategoryData = Pick<SubCategory, "nameSub" | "orderNsub" | "category">
+export type SubCategoryData = Pick<SubCategory, "nameSub" | "orderNsub">

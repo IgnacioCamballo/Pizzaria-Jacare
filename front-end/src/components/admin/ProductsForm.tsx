@@ -1,32 +1,87 @@
-import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
+import { UseMutateFunction, useQuery } from "@tanstack/react-query";
 
 import styles from "@/styles/views/ActionsProjectView.module.css"
 import ErrorMessage from "./ErrorMessage";
 import { getCategories } from "../../api/CategoryAPI";
 
 //Components
-import { ProductForm } from "../../types/types";
+import { Product, ProductForm } from "../../types/types";
+import SubCatSelect from "./SubCatSelect";
+import { useEffect, useState } from "react";
 
 type ProjectFormProps = {
-  register: UseFormRegister<ProductForm>
-  errors: FieldErrors<ProductForm>
-  watch: UseFormWatch<ProductForm>
+  mutateCreate?: UseMutateFunction<any, Error, ProductForm, unknown>,
+  mutateUpdate?: UseMutateFunction<any, Error, {formData: ProductForm, productId: Product["_id"]}, unknown>,
+  editingData?: Product,
+  isCreate: boolean
 }
 
-export default function ProductsForm({ register, errors, watch }: ProjectFormProps) {
+export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, isCreate }: ProjectFormProps) {
+  const [productId] = useState<Product["_id"]>(isCreate ? "" : editingData!._id)
+  const [idNumber, setIdNumber] = useState<ProductForm["idNumber"]>(isCreate ? 0 : editingData?.idNumber) 
+  const [name, setName] = useState<ProductForm["name"]>(isCreate ? "" : editingData!.name) 
+  const [category, setCategory] = useState<ProductForm["category"]>(isCreate ? "" : editingData!.category) 
+  const [categoryName, setCategoryName] = useState<ProductForm["categoryName"]>(isCreate ? "" : editingData!.categoryName) 
+  const [subcategory, setSubcategory] = useState<ProductForm["subcategory"]>(isCreate ? "" : editingData?.subcategory) 
+  const [subcategoryName, setSubcategoryName] = useState<ProductForm["subcategoryName"]>(isCreate ? "" : editingData?.subcategoryName) 
+  const [ingredients, setIngredients] = useState<ProductForm["ingredients"]>(isCreate ? "" : editingData?.ingredients) 
+  const [price, setPrice] = useState<ProductForm["price"]>(isCreate ? 0 : editingData!.price) 
+  const [price2, setPrice2] = useState<ProductForm["price2"]>(isCreate ? 0 : editingData?.price2) 
+  const [img, setImg] = useState<ProductForm["img"]>(isCreate ? "" : editingData?.img) 
+  const [error, setError] = useState(false)
+
+
   const {data} = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories
   })
   
-  const ispizza = watch("category") === "673c815cd2ab7e85c67cb972"
+  //Checks if actual category name is pizza and change to double price and price names
+  const ispizza = category === "673c815cd2ab7e85c67cb972"
   
-  const actualCategoryId = watch("category")
-  const isSubCat = actualCategoryId === "" ? false : data?.find(category => category._id === actualCategoryId)?.subCategories?.length === (0 && undefined && null)
+  //Gets the corresponding sub categories for the selected categories and renders the sub categories section
+  const actualCategorySubs = data?.find(dataCategory => dataCategory._id === category)?.subCategories
+  const isSubCat = category === "" ? false : actualCategorySubs?.length !== (0 && undefined && null)
+
+  useEffect(() => {
+    if(!ispizza) {setPrice2(0), setIngredients("")}
+    if(!isSubCat) {setSubcategory(undefined), setSubcategoryName("")}
+  }, [category])
+
+  const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log("hola")
+
+    if (name === "" || category === "" || price === 0) {
+      setError(true)
+      return
+    }
+    const formData = {
+      idNumber,
+      name,
+      category,
+      categoryName,
+      subcategory,
+      subcategoryName,
+      ingredients,
+      price,
+      price2,
+      img
+    }
+    if (isCreate) {
+      mutateCreate!(formData)
+    } else {
+      const dataForm = { formData, productId }
+      mutateUpdate!(dataForm)
+    }
+  }
 
   return (
-    <>
+    <form
+      className={styles.contenedor_formulario}
+      onSubmit={(e) => handleSubmitForm(e)}
+      noValidate
+    >
       <div className={styles.contenedor_label_input}>
         <label htmlFor="name" className={styles.label}>
           Nombre del Producto *
@@ -36,13 +91,12 @@ export default function ProductsForm({ register, errors, watch }: ProjectFormPro
           className={styles.input}
           type="text"
           placeholder="Nombre del Producto"
-          {...register("name", {
-            required: "El nombre del Producto es obligatorio",
-          })}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
 
-        {errors.name && (
-          <ErrorMessage>{errors.name.message}</ErrorMessage>
+        {error && name === "" && (
+          <ErrorMessage>El nombre es obligatorio</ErrorMessage>
         )}
       </div>
 
@@ -55,7 +109,8 @@ export default function ProductsForm({ register, errors, watch }: ProjectFormPro
           className={styles.input}
           type="number"
           placeholder="Código del Producto"
-          {...register("idNumber")}
+          value={idNumber}
+          onChange={(e) => setIdNumber(parseInt(e.target.value))}
         />
       </div>
 
@@ -66,18 +121,17 @@ export default function ProductsForm({ register, errors, watch }: ProjectFormPro
         <select
           id="category"
           className={styles.input}
-          {...register("category", {
-            required: "La categoría es obligatoria",
-          })}
+          value={category}
+          onChange={(e) => {setCategory(e.target.value), setCategoryName(data?.find(cat => cat._id === e.target.value)?.name!)}}
         >
           <option value="">Seleccionar Categoría</option>
-          {data?.map(category => (
-            <option key={category._id} value={category._id}>{category.name}</option>
+          {data?.map(dataCategory => (
+            <option key={dataCategory._id} value={dataCategory._id}>{dataCategory.name}</option>
           ))}
         </select>
 
-        {errors.category && (
-          <ErrorMessage>{errors.category.message}</ErrorMessage>
+        {error && category === "" && (
+          <ErrorMessage>La categoría es obligatoria</ErrorMessage>
         )}
       </div>
 
@@ -86,18 +140,16 @@ export default function ProductsForm({ register, errors, watch }: ProjectFormPro
           <label htmlFor="subcategory" className={styles.label}>
             Sub-Categoría
           </label>
-          <select
-            id="subcategory"
-            className={styles.input}
-            {...register("subcategory")}
-          >
-            <option value="673c6484d2ab7e85c67cb94e">Clássicas</option>
-            <option value="673c6484d2ab7e85c67cb94e">Tradicionais</option>
-            <option value="673c6484d2ab7e85c67cb94e">Especiais</option>
-          </select>
+
+          <SubCatSelect 
+            actualCategoryId={category} 
+            subcategory={subcategory} 
+            setSubcategory={setSubcategory} 
+            setSubcategoryName={setSubcategoryName}
+          />
         </div>
       )}
-      
+
       {ispizza && (
         <div className={styles.contenedor_label_input}>
           <label htmlFor="ingredients" className={styles.label}>
@@ -108,7 +160,8 @@ export default function ProductsForm({ register, errors, watch }: ProjectFormPro
             className={styles.input}
             type="text"
             placeholder="Ingredientes"
-            {...register("ingredients")}
+            value={ingredients}
+            onChange={(e) => setIngredients(e.target.value)}
           />
         </div>
       )}
@@ -122,13 +175,12 @@ export default function ProductsForm({ register, errors, watch }: ProjectFormPro
           className={styles.input}
           type="number"
           placeholder={ispizza ? "Precio pizza grande" : "Precio"}
-          {...register("price", {
-            required: "El precio es obligatorio",
-          })}
+          value={price}
+          onChange={(e) => setPrice(parseInt(e.target.value))}
         />
 
-        {errors.price && (
-          <ErrorMessage>{errors.price.message}</ErrorMessage>
+        {error && price === 0 && (
+          <ErrorMessage>El precio es obligatorio</ErrorMessage>
         )}
       </div>
 
@@ -141,7 +193,8 @@ export default function ProductsForm({ register, errors, watch }: ProjectFormPro
           className={styles.input}
           type="number"
           placeholder="Precio pizza pequeña"
-          {...register("price2")}
+          value={price2}
+          onChange={(e) => setPrice2(parseInt(e.target.value))}
         />
       </div>}
 
@@ -154,9 +207,16 @@ export default function ProductsForm({ register, errors, watch }: ProjectFormPro
           className={styles.input}
           type="text"
           placeholder="Foto del producto"
-          {...register("img")}
+          value={img}
+          onChange={(e) => setImg(e.target.value)}
         />
       </div>
-    </>
+
+      <button
+        type="submit"
+        className={styles.boton_submit}
+      >{isCreate ? "Crear Producto" : "Guardar Cambios"}</button>
+    </form>
   )
 }
+

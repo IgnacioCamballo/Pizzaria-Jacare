@@ -50,7 +50,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 30rem;
+    max-width: 34rem;
     padding: 0.75rem 1.5rem;
     background-color: white;
     border-radius: 1rem;
@@ -98,6 +98,11 @@
     line-height: 1rem; 
     color: var(--color-letras2);
     margin: 0;
+}
+
+.span {
+    color: var(--color-letras1);
+    font-weight: 700;
 }
 
 .prices {

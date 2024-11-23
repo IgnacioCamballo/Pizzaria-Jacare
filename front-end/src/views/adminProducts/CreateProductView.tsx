@@ -1,27 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-import { ProductForm } from "../../types/types";
 import { createProduct } from "../../api/ProductAPI";
 import ProductsForm from "../../components/admin/ProductsForm";
 import styles from "@/styles/views/ActionsProjectView.module.css"
 
 export default function CreateProductView() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
-  const initialValues: ProductForm = { 
-    idNumber: 0,
-    name: "",
-    category: "",
-    subcategory: null,
-    ingredients: undefined,
-    price: 0,
-    price2: 0,
-    img: undefined
-  }
-  const {register, watch, handleSubmit, formState: {errors}} = useForm({defaultValues: initialValues})
+  
 
   const {mutate} = useMutation({
     mutationFn: createProduct,
@@ -30,11 +19,12 @@ export default function CreateProductView() {
     },
     onSuccess: (data) => {
       toast.success(data)
-    navigate("/admin")
+      queryClient.invalidateQueries({queryKey: ["products"]})
+      queryClient.invalidateQueries({queryKey: ["categories"]})
+      queryClient.invalidateQueries({queryKey: ["SubCategory"]})
+      navigate("/admin")
     }
   })
-
-  const handleForm = (formData: ProductForm) => {mutate(formData)}
 
   return (
     <div className={styles.contenedor_general}>
@@ -48,23 +38,8 @@ export default function CreateProductView() {
         >Volver a Productos</Link>
       </nav>
 
-      <form 
-        className={styles.contenedor_formulario} 
-        onSubmit={handleSubmit(handleForm)}
-        noValidate
-      >
-        <ProductsForm
-          register={register}
-          errors={errors}
-          watch={watch}
-        />
-
-        <input
-          type="submit"
-          value="Crear Proyecto"
-          className={styles.boton_submit}
-        />
-      </form>
+      <ProductsForm mutateCreate={mutate} isCreate={true}/>  
     </div>
   )
 }
+

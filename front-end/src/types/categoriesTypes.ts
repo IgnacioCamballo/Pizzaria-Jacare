@@ -1,12 +1,11 @@
 import {z} from "zod"
-import { SubCategorySchema } from "./subCategoriesTypes"
 
 /** Categories */
 export const CategorySchema = z.object({
   _id: z.string(),
   name: z.string(),
   orderN: z.number(),
-  subCategories: z.array(SubCategorySchema)
+  subCategories: z.array(z.string())
 })
 
 export const adminCategorySchema = z.array(

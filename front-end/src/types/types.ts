@@ -21,11 +21,13 @@ export type producto = {
 }
 
 export const ProductSchema = z.object({
-    _id: z.string().optional(),
+    _id: z.string(),
     idNumber: z.number().optional(),
     name: z.string(),
     category: z.string(),
-    subcategory: z.string().optional().nullable(),
+    categoryName: z.string(),
+    subcategory: z.string().optional(),
+    subcategoryName: z.string().optional(),
     ingredients: z.string().optional(),
     price: z.number(),
     price2: z.number().optional(),
@@ -38,7 +40,9 @@ export const adminProductSchema = z.array(
         idNumber: true,
         name: true,
         category: true,
+        categoryName: true,
         subcategory: true,
+        subcategoryName: true,
         ingredients: true,
         price: true,
         price2: true,
@@ -47,7 +51,7 @@ export const adminProductSchema = z.array(
 )
 
 export type Product = z.infer<typeof ProductSchema>
-export type ProductForm = Pick<Product, "idNumber" | "name" | "category" | "subcategory" | "ingredients" | "price" | "price2" | "img">
+export type ProductForm = Pick<Product, "idNumber" | "name" | "category" | "categoryName" | "subcategory" | "subcategoryName" | "ingredients" | "price" | "price2" | "img">
 
 export type MenuContextProps = {
     menu: string,

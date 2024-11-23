@@ -1,32 +1,21 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Product, ProductForm } from "../../types/types";
+import { Product } from "../../types/types";
 import ProductsForm from "./ProductsForm";
 import styles from "@/styles/views/ActionsProjectView.module.css"
 import { updateProduct } from "../../api/ProductAPI";
 import { toast } from "react-toastify";
 
 type EditProductFormProps = {
-  data: ProductForm,
+  data: Product,
   productId: Product["_id"]
 }
 
 export default function EditProductForm({data, productId}: EditProductFormProps) {
   const navigate = useNavigate()
 
-  const initialValues: ProductForm = { 
-    idNumber: data.idNumber,
-    name: data.name,
-    category: data.category,
-    subcategory: data.subcategory,
-    ingredients: data.ingredients,
-    price: data.price,
-    price2: data.price2,
-    img: data.img
-  }
-  const {register, watch, handleSubmit, formState: {errors}} = useForm({defaultValues: initialValues})
+  
 
   const queryClient = useQueryClient()
 
@@ -38,45 +27,26 @@ export default function EditProductForm({data, productId}: EditProductFormProps)
     onSuccess: (data) => {
       queryClient.invalidateQueries({queryKey: ["products"]})
       queryClient.invalidateQueries({queryKey: ["editProduct", productId]})
+      queryClient.invalidateQueries({queryKey: ["categories"]})
+      queryClient.invalidateQueries({queryKey: ["SubCategory"]})
       toast.success(data)
       navigate("/admin")
     }
   })
 
-  const handleForm = (formData: ProductForm) => {
-    const data = {formData, productId}
-    mutate(data)
-  }
-  
   return (
     <div className={styles.contenedor_general}>
-      <h1 className={styles.titulo}>Editar Producto</h1>
-      <p className={styles.subtitulo}>Llena el formulario para editar el producto</p>
+     <h1 className={styles.titulo}>Editar Producto</h1>
+     <p className={styles.subtitulo}>Llena el formulario para editar el producto</p>
       
-      <nav>
-        <Link
-          className={styles.link_boton}
-          to="/admin"
-        >Volver a Productos</Link>
-      </nav>
+     <nav>
+       <Link
+         className={styles.link_boton}
+         to="/admin"
+       >Volver a Productos</Link>
+     </nav>
 
-      <form 
-        className={styles.contenedor_formulario} 
-        onSubmit={handleSubmit(handleForm)}
-        noValidate
-      >
-        <ProductsForm
-          register={register}
-          errors={errors}
-          watch={watch}
-        />
-
-        <input
-          type="submit"
-          value="Editar Producto"
-          className={styles.boton_submit}
-        />
-      </form>
-    </div>
+     <ProductsForm editingData={data} mutateUpdate={mutate} isCreate={false}/>  
+   </div>
   )
 }

@@ -236,7 +236,6 @@ const MenuProvider = ({children}: props) => {
             }
         }
         mensaje += `Total do pedido = R$${total}`
-        console.log(mensaje)
 
         const whatsappURL = `https://api.whatsapp.com/send?phone=${numero}&text=${mensaje}`;
         window.open(whatsappURL, "_blank");

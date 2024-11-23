@@ -13,7 +13,7 @@ import CategoryModal from "../../components/admin/CategoryModal";
 import AlertModal from "../../components/admin/AlertModal";
 import CategoryItem from "../../components/admin/CategoryItem";
 
-export default function CategoriesView() {  
+export default function CategoriesView() {
   const [alertModal, setAlertModal] = useState(false)
   const [categoryList, setCategoryList] = useState<Category[]>([])
 
@@ -30,23 +30,23 @@ export default function CategoriesView() {
       toast.error(error.message)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({queryKey: ["categories"]})
+      queryClient.invalidateQueries({ queryKey: ["categories"] })
       toast.success(data)
     }
   })
-  
-  const {data, isLoading } = useQuery({
+
+  const { data, isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories
   })
- 
+
   const queryUpdateCategory = useMutation({
     mutationFn: updateCategory,
     onError: (error) => {
       toast.error(error.message)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({queryKey: ["categories"]})
+      queryClient.invalidateQueries({ queryKey: ["categories"] })
       toast.success(data)
     }
   })
@@ -64,29 +64,29 @@ export default function CategoriesView() {
       toast.error(error.message)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({queryKey: ["categories"]})
+      queryClient.invalidateQueries({ queryKey: ["categories"] })
       toast.success(data)
     }
   })
 
   //categories api handlers
-  useEffect (() => {
-    if(data) {
+  useEffect(() => {
+    if (data) {
       const SortedData = data.sort((cat1, cat2) => cat1.orderN - cat2.orderN)
       setCategoryList(SortedData)
     }
   }, [data])
- 
+
   function handleEditingCat(e: { target: { value: SetStateAction<string>; }; }) {
     setCatEditing(e.target.value)
   }
 
   const handleSubmitCat = (e: { preventDefault: () => void; }) => {
     e.preventDefault()
-    
-    if(catEditingId === "") {
+
+    if (catEditingId === "") {
       //creates new category
-      const {mutate} = queryCreateCategory
+      const { mutate } = queryCreateCategory
 
       const formData: CategoryData = {
         name: catEditing,
@@ -96,36 +96,36 @@ export default function CategoriesView() {
       onCloseModal()
     } else {
       //uppdates current category
-      const {mutate} = queryUpdateCategory
+      const { mutate } = queryUpdateCategory
 
       const formData: CategoryData = {
         name: catEditing,
         orderN: categoryList.find(cat => cat._id === catEditingId)?.orderN!
       }
-      const data = {formData: formData, categoryId: catEditingId}
-      
+      const data = { formData: formData, categoryId: catEditingId }
+
       mutate(data)
       onCloseModal()
     }
   }
-  
+
   const handleDeleteCat = () => {
-    const {mutate} = queryDeleteCategory
+    const { mutate } = queryDeleteCategory
     mutate(catEditingId)
   }
 
-  async function handleSortCategories (evt: Sortable.SortableEvent) {
-    const {oldIndex, newIndex} = evt
+  async function handleSortCategories(evt: Sortable.SortableEvent) {
+    const { oldIndex, newIndex } = evt
     const listCopy = [...categoryList]
-    
-    const [removed] = listCopy.splice(oldIndex!, 1) 
+
+    const [removed] = listCopy.splice(oldIndex!, 1)
     listCopy.splice(newIndex!, 0, removed)
-    
+
     const newCatList = listCopy.map((category, index) => ({
       ...category,
       orderN: index
     }))
-    
+
     const updatePromises = newCatList.map(category => {
       const formData = { name: category.name, orderN: category.orderN };
       const data = { formData, categoryId: category._id };
@@ -133,78 +133,79 @@ export default function CategoriesView() {
     });
 
     try {
-        await Promise.all(updatePromises);
-        queryClient.invalidateQueries({ queryKey: ["categories"] });
+      await Promise.all(updatePromises);
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
     } catch (error) {
-        // Manejar errores aquí
-        console.error('Error al actualizar las categorías:', error);
+      // Manejar errores aquí
+      console.error('Error al actualizar las categorías:', error);
     }
   }
-  
+
   //gets the name of the item trying to delete
   function nameDeletingCat() {
     const CategoryName = categoryList.find(product => product._id === catEditingId)?.name
     return CategoryName
   }
-  
+
   const onCloseModal = () => {
-    setCatModal(false) 
-    setCatEditing("") 
+    setCatModal(false)
+    setCatEditing("")
     setCatEditingId("")
   }
 
-  if(isLoading) return "Cargando..."
+  if (isLoading) return "Cargando..."
 
-  if(data) return (
+  if (data) return (
     <div className={styles.container}>
       <h1 className={styles.titulo}>Categorías</h1>
       <p className={styles.subtitulo}>Administra las Categorías y Sub-Categorías</p>
-      
+
       <div className={styles.buttons_cont}>
         <Link className={styles.link_boton} to="/admin">Volver a Productos</Link>
 
-        <button onClick={() => {setCatModal(true)}} className={styles.new_boton}> Nueva Categoría</button>
+        <button onClick={() => { setCatModal(true) }} className={styles.new_boton}> Nueva Categoría</button>
       </div>
 
       {categoryList.length ? (
-        <ReactSortable 
-          tag="ul" 
-          className={styles.list_container} 
-          list={categoryList} 
+        <ReactSortable
+          tag="ul"
+          className={styles.list_container}
+          list={categoryList}
           setList={setCategoryList}
           dragClass="sortableDrag"
           animation={200}
           easing="ease-out"
           onEnd={(evt) => handleSortCategories(evt)}
         >
-          {categoryList.map(category => 
-            <CategoryItem 
-            key={category._id}
-            category={category}
-            menuAction1={() => {}}
-            menuAction2={() => {setCatModal(true), setCatEditing(category.name), setCatEditingId(category._id)}}
-            menuAction3={() => {setAlertModal(true), setCatEditingId(category._id)}}
+          {categoryList.map(category =>
+            <CategoryItem
+              key={category._id}
+              category={category}
+              editCategory={() => { setCatModal(true), setCatEditing(category.name), setCatEditingId(category._id) }}
+              deleteCategory={() => { setAlertModal(true), setCatEditingId(category._id) }}
             />
           )}
         </ReactSortable>
       ) : (
         <>No hay categorías aún</>
       )}
-      {catModal && 
-        <CategoryModal 
+
+      {catModal &&
+        <CategoryModal
           onCancel={onCloseModal}
           onSubmit={handleSubmitCat}
           onEdit={handleEditingCat}
           catEditing={catEditing}
         />
       }
+
       {alertModal && (
-            <AlertModal 
-              message={`Seguro que deseas eliminar ${nameDeletingCat()}`}
-              onCancel={() => {setAlertModal(false), setCatEditingId("")}}
-              onConfirm={() => {handleDeleteCat(), setAlertModal(false), setCatEditingId("")}}
-            />
-          )}
+        <AlertModal
+          message={`Seguro que deseas eliminar ${nameDeletingCat()}`}
+          onCancel={() => { setAlertModal(false), setCatEditingId("") }}
+          onConfirm={() => { handleDeleteCat(), setAlertModal(false), setCatEditingId("") }}
+        />
+      )}
     </div>
   )
 }

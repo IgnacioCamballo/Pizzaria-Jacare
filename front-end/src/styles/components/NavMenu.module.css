@@ -1,5 +1,6 @@
 .popover {
     position: relative;
+    padding: 1rem 2rem;
 }
 
 .popover_button {

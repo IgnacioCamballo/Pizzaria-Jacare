@@ -2,10 +2,14 @@ import { isAxiosError } from "axios";
 import api from "../lib/axios";
 import { adminSubCategorySchema, SubCategory, SubCategoryData } from "../types/subCategoriesTypes";
 
+type SubCatCreateProps = {
+  formData: SubCategoryData
+  catId: SubCategory["category"],
+}
 
-export async function createSubCategory(formData: SubCategoryData) {
+export async function createSubCategory({formData, catId }: SubCatCreateProps) {
   try {
-    const {data} = await api.post(`/categories/${formData.category}/subCategory/`, formData)
+    const {data} = await api.post(`/categories/${catId}/subCategory/`, formData)
     return data
   } catch (error) {
     if(isAxiosError(error) && error.response) {
@@ -26,14 +30,15 @@ export async function getSubCategories(category: string) {
   }
 }
 
-type updateSubCategoryProps = {
-  formData: SubCategoryData,
-  categoryId: SubCategory["_id"]
+type SubCatUppdateProps = {
+  formData: SubCategoryData
+  catId: SubCategory["category"],
+  subId: SubCategory["_id"]
 }
 
-export async function updateSubCategory({formData, categoryId}: updateSubCategoryProps) {
+export async function updateSubCategory({formData, catId, subId }: SubCatUppdateProps) {
   try {
-    const { data } = await api.put<string>(`/categories/${formData.category}/subCategory/${categoryId}`, formData)
+    const { data } = await api.put<string>(`/categories/${catId}/subCategory/${subId}`, formData)
     return data
   } catch (error) {
     if(isAxiosError(error) && error.response) {
@@ -42,7 +47,12 @@ export async function updateSubCategory({formData, categoryId}: updateSubCategor
   }
 }
 
-export async function deleteSubCategory(catId: SubCategory["category"], subId: SubCategory["_id"]) {
+type deleteSubCategoryProps = {
+  catId: SubCategory["category"],
+  subId: SubCategory["_id"]
+}
+
+export async function deleteSubCategory({catId, subId}: deleteSubCategoryProps) {
   try {
     const { data } = await api.delete<string>(`/categories/${catId}/subCategory/${subId}`)
     return data

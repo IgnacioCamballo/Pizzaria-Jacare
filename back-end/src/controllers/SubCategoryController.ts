@@ -18,7 +18,7 @@ export class SubCategoryController {
   //gets all the sub catgories that belong to the category in params
   static getCategorySubs = async (req: Request, res: Response) => {
     try {
-      const subCat = await SubCategory.find({category: req.category.id}).populate("category")
+      const subCat = await SubCategory.find({category: req.category.id})
       res.json(subCat)
     } catch (error) {
       res.status(500).json({error: "Hubo un error"})
@@ -47,9 +47,18 @@ export class SubCategoryController {
         return
       }
 
-      req.subCat.nameSub = req.body.nameSub
-      req.subCat.orderNSub = req.body.orderNSub
-      await req.subCat.save()
+      const {subId} = req.params
+      const subCategory = await SubCategory.findByIdAndUpdate(subId, req.body)
+      
+      if(!subCategory) {
+        const error = new Error('Categoría no encontrada')
+        res.status(404).json({error: error.message})
+        return
+      }
+
+      // req.subCat.nameSub = req.body.nameSub
+      // req.subCat.orderNSub = req.body.orderNSub
+      // await req.subCat.save()
 
       res.send("Sub-Categoría actualizada correctamente")
     } catch (error) {
@@ -70,7 +79,7 @@ export class SubCategoryController {
 
       await Promise.allSettled([req.subCat.deleteOne(), req.category.save()])
 
-      res.send("Sub-Categoría actualizada correctamente")
+      res.send("Sub-Categoría eliminada")
     } catch (error) {
       res.status(500).json({error: "Hubo un error"})
     }

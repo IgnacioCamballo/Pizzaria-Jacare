@@ -10,18 +10,16 @@ export default function CreateProductView() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  
-
   const {mutate} = useMutation({
     mutationFn: createProduct,
     onError: (error) => {
       toast.error(error.message)
     },
     onSuccess: (data) => {
-      toast.success(data)
       queryClient.invalidateQueries({queryKey: ["products"]})
       queryClient.invalidateQueries({queryKey: ["categories"]})
       queryClient.invalidateQueries({queryKey: ["SubCategory"]})
+      toast.success(data)
       navigate("/admin")
     }
   })

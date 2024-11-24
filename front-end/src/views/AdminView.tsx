@@ -15,6 +15,7 @@ export default function AdminView() {
   const [alertModal, setAlertModal] = useState(false)
   const [deletingItem, setDeletingItem] = useState("")
   const [categoryList, setCategoryList] = useState<Category[]>([])
+  const [currentCategory, setCurrentCategory] = useState<Category>({ _id: "", name: "", orderN: 0, subCategories: [], products: [] })
 
   const queryClient = useQueryClient()
 
@@ -31,8 +32,16 @@ export default function AdminView() {
   })
   useEffect(() => {
     const { data } = queryGetCategories
-    if (data) { setCategoryList(data) }
+    if (data) {
+      data.sort((a, b) => a.orderN - b.orderN)
+      setCategoryList(data)
+      setCurrentCategory(data[0])
+    }
   }, [data])
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["SubCategory"] })
+  }, [currentCategory])
 
   //deletes product from the database
   const { mutate } = useMutation({
@@ -67,20 +76,45 @@ export default function AdminView() {
       </nav>
 
       {data.length ? (
-        <div className={styles.listado_productos}>
-          {categoryList.sort((a, b) => a.orderN - b.orderN).map(category =>
-            <ProductsBySubCat 
-              key={category._id}
-              category={category} 
-              productsData={data} 
-              setAlertModal={setAlertModal} 
-              setDeletingItem={setDeletingItem}
-            />
-          )}
+        <div>
+          <div className={styles.categories_name_container}>
+            {categoryList.map(category =>
+              <div
+                className={`${styles.category_name} ${category._id === currentCategory._id ? styles.category_name_active : ""}`}
+                key={category._id}
+                onClick={() => { setCurrentCategory(category) }}
+              >
+                <p className={styles.category_n_text}>{category.name}</p>
+              </div>
+            )}
+          </div>
+
+          <div className={styles.categories_container}>
+            {currentCategory!.products.length ? (
+              <ProductsBySubCat
+                category={currentCategory!}
+                productsData={data}
+                setAlertModal={setAlertModal}
+                setDeletingItem={setDeletingItem}
+              />
+            ) : (
+              <div>
+                <p className={styles.texto_cat_sin_proyectos}>
+                  Todavía no hay Productos para esta Categoría {""}
+                  <Link
+                    to="/admin/products/create"
+                    className={styles.texto_sin_proyectos_link}
+                  >Crear Producto</Link>
+                </p>
+              </div>
+            )}
+          </div>
+
+
         </div>
       ) : (
         <p className={styles.texto_sin_proyectos}>
-          No hay Productos todavía {""}
+          No hay Productos en todavía {""}
           <Link
             to="/admin/products/create"
             className={styles.texto_sin_proyectos_link}

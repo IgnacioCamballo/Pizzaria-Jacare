@@ -5,7 +5,8 @@ export const CategorySchema = z.object({
   _id: z.string(),
   name: z.string(),
   orderN: z.number(),
-  subCategories: z.array(z.string())
+  subCategories: z.array(z.string()),
+  products: z.array(z.string())
 })
 
 export const adminCategorySchema = z.array(
@@ -13,7 +14,8 @@ export const adminCategorySchema = z.array(
     _id: true,
     name: true,
     orderN: true,
-    subCategories: true
+    subCategories: true,
+    products: true
   })
 )
 

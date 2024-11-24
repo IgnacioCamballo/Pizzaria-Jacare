@@ -18,7 +18,7 @@ type ProjectFormProps = {
 
 export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, isCreate }: ProjectFormProps) {
   const [productId] = useState<Product["_id"]>(isCreate ? "" : editingData!._id)
-  const [idNumber, setIdNumber] = useState<ProductForm["idNumber"]>(isCreate ? 0 : editingData?.idNumber) 
+  const [idNumber, setIdNumber] = useState<ProductForm["idNumber"]>(isCreate ? 0 : editingData!.idNumber) 
   const [name, setName] = useState<ProductForm["name"]>(isCreate ? "" : editingData!.name) 
   const [category, setCategory] = useState<ProductForm["category"]>(isCreate ? "" : editingData!.category) 
   const [categoryName, setCategoryName] = useState<ProductForm["categoryName"]>(isCreate ? "" : editingData!.categoryName) 
@@ -50,7 +50,6 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log("hola")
 
     if (name === "" || category === "" || price === 0) {
       setError(true)

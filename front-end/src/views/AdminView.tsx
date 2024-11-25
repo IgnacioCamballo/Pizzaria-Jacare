@@ -77,17 +77,17 @@ export default function AdminView() {
 
       {data.length ? (
         <div>
-          <div className={styles.categories_name_container}>
+          <ul className={styles.categories_name_container}>
             {categoryList.map(category =>
-              <div
+              <li
                 className={`${styles.category_name} ${category._id === currentCategory._id ? styles.category_name_active : ""}`}
                 key={category._id}
                 onClick={() => { setCurrentCategory(category) }}
               >
                 <p className={styles.category_n_text}>{category.name}</p>
-              </div>
+              </li>
             )}
-          </div>
+          </ul>
 
           <div className={styles.categories_container}>
             {currentCategory!.products.length ? (

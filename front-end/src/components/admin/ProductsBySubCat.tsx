@@ -45,20 +45,22 @@ export default function ProductsBySubCat({ category, productsData, setAlertModal
         {subCategoryList.map(subcat =>
           <div key={subcat._id}>
             <h2 className={styles.subCat_name}>{subcat.nameSub}</h2>
-            {productsData!.filter(product => product.category === category._id && product.subcategory === subcat._id).length ?
-              productsData!.filter(product => product.category === category._id && product.subcategory === subcat._id)
-                .sort((a, b) => a.idNumber - b.idNumber)
-                .map(product =>
-                  <ProductItem product={product} setAlertModal={setAlertModal} setDeletingItem={setDeletingItem} key={product._id} />
-                ) :
-              <p className={styles.texto_cat_sin_proyectos}>
-                Todavía no hay Productos para esta Sub Categoría {""}
-                <Link
-                  to="/admin/products/create"
-                  className={styles.texto_sin_proyectos_link}
-                >Crear Producto</Link>
-              </p>
-            }
+            <div className={styles.listado_productos}>
+              {productsData!.filter(product => product.category === category._id && product.subcategory === subcat._id).length ?
+                productsData!.filter(product => product.category === category._id && product.subcategory === subcat._id)
+                  .sort((a, b) => a.idNumber - b.idNumber)
+                  .map(product =>
+                    <ProductItem product={product} setAlertModal={setAlertModal} setDeletingItem={setDeletingItem} key={product._id} />
+                  ) :
+                <p className={styles.texto_cat_sin_proyectos}>
+                  Todavía no hay Productos para esta Sub Categoría {""}
+                  <Link
+                    to="/admin/products/create"
+                    className={styles.texto_sin_proyectos_link}
+                  >Crear Producto</Link>
+                </p>
+              }
+            </div>
           </div>
         )}
       </div>

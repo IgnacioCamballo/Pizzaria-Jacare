@@ -63,6 +63,7 @@
   list-style: none;
   margin-block: 0;
   padding-inline-start: 0;
+  margin-bottom: 6rem;
 }
 
 .category_container {
@@ -150,4 +151,8 @@
 .modal_button {
   width: 5rem;
   cursor: pointer;
+}
+
+.no_categ {
+  align-self: center;
 }

@@ -31,6 +31,17 @@ type updateCategoryProps = {
   categoryId: Category["_id"]
 }
 
+export async function getCategoryById(id: Category["_id"]) {
+  try {
+    const { data } = await api(`/categories/${id}`)
+    return data
+  } catch (error) {
+    if(isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error)
+    }
+  }
+}
+
 export async function updateCategory({formData, categoryId}: updateCategoryProps) {
   try {
     const { data } = await api.put<string>(`/categories/${categoryId}`, formData)

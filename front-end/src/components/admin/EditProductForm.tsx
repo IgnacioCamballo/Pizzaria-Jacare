@@ -15,8 +15,6 @@ type EditProductFormProps = {
 export default function EditProductForm({data, productId}: EditProductFormProps) {
   const navigate = useNavigate()
 
-  
-
   const queryClient = useQueryClient()
 
   const {mutate} = useMutation({
@@ -25,10 +23,8 @@ export default function EditProductForm({data, productId}: EditProductFormProps)
       toast.error(error.message)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({queryKey: ["products"]})
       queryClient.invalidateQueries({queryKey: ["editProduct", productId]})
       queryClient.invalidateQueries({queryKey: ["categories"]})
-      queryClient.invalidateQueries({queryKey: ["SubCategory"]})
       toast.success(data)
       navigate("/admin")
     }

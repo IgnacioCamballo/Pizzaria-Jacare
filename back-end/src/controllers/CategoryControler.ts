@@ -17,8 +17,8 @@ export class CategoryController {
   
   static getAllCategories = async (req: Request, res: Response) => {
     try {
-      const categories = await Category.find({})
-      res.json(categories)
+      const categories = await Category.find({}).populate("subCategories").populate("products")
+      res.json(categories)      
     } catch (error) {
       console.log(error)
     }

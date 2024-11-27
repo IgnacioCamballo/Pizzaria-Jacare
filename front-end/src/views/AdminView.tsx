@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 
 import styles from "@/styles/views/AdminView.module.css"
-import { deleteProduct, getProducts } from "../api/ProductAPI"
+import { deleteProduct } from "../api/ProductAPI"
 import { getCategories } from "../api/CategoryAPI"
 import { Category } from "../types/categoriesTypes"
 
@@ -19,29 +19,23 @@ export default function AdminView() {
 
   const queryClient = useQueryClient()
 
-  //gets the products from the database
-  const { data, isLoading } = useQuery({
-    queryKey: ["products"],
-    queryFn: getProducts
-  })
-
   //gets the categories
-  const queryGetCategories = useQuery({
+  const {data, isLoading} = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories
   })
+
   useEffect(() => {
-    const { data } = queryGetCategories
     if (data) {
       data.sort((a, b) => a.orderN - b.orderN)
       setCategoryList(data)
-      setCurrentCategory(data[0])
+      if(currentCategory._id !== "") {
+        setCurrentCategory(data.find(cat => cat._id === currentCategory._id)!)
+      } else {
+        setCurrentCategory(data[0])
+      }
     }
   }, [data])
-
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ["SubCategory"] })
-  }, [currentCategory])
 
   //deletes product from the database
   const { mutate } = useMutation({
@@ -50,20 +44,20 @@ export default function AdminView() {
       toast.error(error.message)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["products"] })
+      queryClient.invalidateQueries({ queryKey: ["categories"] })
       toast.success(data)
     }
   })
 
   //gets the name of the item trying to delete
   function nameDeletingItem() {
-    const ProductName = data?.find(product => product._id === deletingItem)?.name
+    const ProductName = currentCategory.products.find(product => product._id === deletingItem)?.name
     return ProductName
   }
 
   if (isLoading) return "Cargando..."
 
-  if (data) return (
+  if (categoryList) return (
     <div className={styles.container}>
       <h1 className={styles.titulo}>Mis Productos</h1>
       <p className={styles.subtitulo}>Maneja y administra tus productos</p>
@@ -71,11 +65,11 @@ export default function AdminView() {
       <nav className={styles.boton_nuevo}>
         <Link
           className={styles.link_boton}
-          to="/admin/products/create"
+          to={categoryList?.length !== 0 ? "/admin/products/create" : ""}
         >Nuevo Producto</Link>
       </nav>
 
-      {data.length ? (
+      {categoryList.length ? (
         <div>
           <ul className={styles.categories_name_container}>
             {categoryList.map(category =>
@@ -93,7 +87,6 @@ export default function AdminView() {
             {currentCategory!.products.length ? (
               <ProductsBySubCat
                 category={currentCategory!}
-                productsData={data}
                 setAlertModal={setAlertModal}
                 setDeletingItem={setDeletingItem}
               />
@@ -114,11 +107,11 @@ export default function AdminView() {
         </div>
       ) : (
         <p className={styles.texto_sin_proyectos}>
-          No hay Productos en todavía {""}
+          No hay Categorías todavía {""}
           <Link
-            to="/admin/products/create"
+            to="/admin/categories"
             className={styles.texto_sin_proyectos_link}
-          >Crear Producto</Link>
+          >Crear Categorías</Link>
         </p>
       )}
 

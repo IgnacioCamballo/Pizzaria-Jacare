@@ -21,6 +21,8 @@ export default function CategoriesView() {
   const [catEditing, setCatEditing] = useState("")
   const [catEditingId, setCatEditingId] = useState("")
 
+  const ispizza = catEditingId === "6745a201863966676ae14433"
+
   const queryClient = useQueryClient()
 
   //querys for categories
@@ -52,6 +54,7 @@ export default function CategoriesView() {
   })
 
   const querySortCategories = useMutation({
+    //this is a copy of updateCategory but without toast success
     mutationFn: updateCategory,
     onError: (error) => {
       toast.error(error.message)
@@ -136,7 +139,6 @@ export default function CategoriesView() {
       await Promise.all(updatePromises);
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     } catch (error) {
-      // Manejar errores aquí
       console.error('Error al actualizar las categorías:', error);
     }
   }
@@ -187,7 +189,7 @@ export default function CategoriesView() {
           )}
         </ReactSortable>
       ) : (
-        <>No hay categorías aún</>
+        <p className={styles.no_categ}>No hay categorías aún</p>
       )}
 
       {catModal &&
@@ -201,9 +203,9 @@ export default function CategoriesView() {
 
       {alertModal && (
         <AlertModal
-          message={`Seguro que deseas eliminar ${nameDeletingCat()}`}
+          message={`${ispizza ? `No se puede eliminar ${nameDeletingCat()}` : `Seguro que deseas eliminar ${nameDeletingCat()}`}`}
           onCancel={() => { setAlertModal(false), setCatEditingId("") }}
-          onConfirm={() => { handleDeleteCat(), setAlertModal(false), setCatEditingId("") }}
+          onConfirm={() => {ispizza ? {} : (setAlertModal(false), setCatEditingId(""), handleDeleteCat())}}
         />
       )}
     </div>

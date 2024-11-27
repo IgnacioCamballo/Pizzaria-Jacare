@@ -5,18 +5,21 @@ import SubCategory from "../models/SubCategories"
 
 export class ProductController {
   static createProduct = async (req: Request, res: Response) => {
-    const product = new Product(req.body)
+    const { category, subcategory } = req.body
 
+    const product = new Product(req.body)
+    const categ = await Category.findById(category)
+    
     try {
-      const { category, subcategory } = req.body
+      categ.products.push(product.id)
+
       await product.save()
-      await Category.findByIdAndUpdate(category, {
-        $push: {products: product._id}
-      })
+      await categ.save()
+      
       if(subcategory) {
-        await SubCategory.findByIdAndUpdate(subcategory, {
-          $push: {products: product._id}
-        })
+        const subCat = await SubCategory.findById(subcategory)
+        subCat.products.push(product.id)
+        await subCat.save()
       }
       
       res.send("Producto creado correctamente")
@@ -74,7 +77,7 @@ export class ProductController {
         })
       }
       //Updates in SubCategory.products
-      if(subcategory && subcategory !== product.subcategory) {
+      if(subcategory !== product.subcategory) {
         await SubCategory.findByIdAndUpdate(product.subcategory, {
           $pull: {products: id}
         })

@@ -21,9 +21,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
   const [idNumber, setIdNumber] = useState<ProductForm["idNumber"]>(isCreate ? 0 : editingData!.idNumber) 
   const [name, setName] = useState<ProductForm["name"]>(isCreate ? "" : editingData!.name) 
   const [category, setCategory] = useState<ProductForm["category"]>(isCreate ? "" : editingData!.category) 
-  const [categoryName, setCategoryName] = useState<ProductForm["categoryName"]>(isCreate ? "" : editingData!.categoryName) 
   const [subcategory, setSubcategory] = useState<ProductForm["subcategory"]>(isCreate ? "" : editingData?.subcategory) 
-  const [subcategoryName, setSubcategoryName] = useState<ProductForm["subcategoryName"]>(isCreate ? "" : editingData?.subcategoryName) 
   const [ingredients, setIngredients] = useState<ProductForm["ingredients"]>(isCreate ? "" : editingData?.ingredients) 
   const [price, setPrice] = useState<ProductForm["price"]>(isCreate ? 0 : editingData!.price) 
   const [price2, setPrice2] = useState<ProductForm["price2"]>(isCreate ? 0 : editingData?.price2) 
@@ -37,15 +35,15 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
   })
   
   //Checks if actual category name is pizza and change to double price and price names
-  const ispizza = category === "673c815cd2ab7e85c67cb972"
+  const ispizza = category === "6745a201863966676ae14433"
   
   //Gets the corresponding sub categories for the selected categories and renders the sub categories section
   const actualCategorySubs = data?.find(dataCategory => dataCategory._id === category)?.subCategories
-  const isSubCat = category === "" ? false : actualCategorySubs?.length !== (0 && undefined && null)
+  const isSubCat = category === "" ? false : actualCategorySubs?.length ? true : false
 
   useEffect(() => {
     if(!ispizza) {setPrice2(0), setIngredients("")}
-    if(!isSubCat) {setSubcategory(undefined), setSubcategoryName("")}
+    if(!isSubCat) {setSubcategory(null)}
   }, [category])
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,14 +57,13 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
       idNumber,
       name,
       category,
-      categoryName,
       subcategory,
-      subcategoryName,
       ingredients,
       price,
       price2,
       img
     }
+    
     if (isCreate) {
       mutateCreate!(formData)
     } else {
@@ -121,10 +118,10 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
           id="category"
           className={styles.input}
           value={category}
-          onChange={(e) => {setCategory(e.target.value), setCategoryName(data?.find(cat => cat._id === e.target.value)?.name!)}}
+          onChange={(e) => setCategory(e.target.value)}
         >
           <option value="">Seleccionar Categoría</option>
-          {data?.map(dataCategory => (
+          {data?.sort((a, b) => a.orderN - b.orderN).map(dataCategory => (
             <option key={dataCategory._id} value={dataCategory._id}>{dataCategory.name}</option>
           ))}
         </select>
@@ -141,10 +138,9 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
           </label>
 
           <SubCatSelect 
-            actualCategoryId={category} 
+            actualCategory={data!.find(cat => cat._id === category)!} 
             subcategory={subcategory} 
             setSubcategory={setSubcategory} 
-            setSubcategoryName={setSubcategoryName}
           />
         </div>
       )}

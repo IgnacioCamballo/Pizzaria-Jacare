@@ -1,5 +1,3 @@
-import { getSubCategories } from "../../api/SubCategoryAPI"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 import styles from "@/styles/views/AdminView.module.css"
 import ProductItem from "./ProductItem"
@@ -11,43 +9,34 @@ import { Link } from "react-router-dom"
 
 type ProductsBySubCatProps = {
   category: Category,
-  productsData: Product[],
   setDeletingItem: React.Dispatch<React.SetStateAction<string>>,
   setAlertModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function ProductsBySubCat({ category, productsData, setAlertModal, setDeletingItem }: ProductsBySubCatProps) {
-  const queryClient = useQueryClient()
+export default function ProductsBySubCat({ category, setAlertModal, setDeletingItem }: ProductsBySubCatProps) {
 
   const [subCategoryList, setSubCategoryList] = useState<SubCategory[]>([])
-
-  //gets the subCategories for the categorie given
-  const { data } = useQuery({
-    queryKey: ["SubCategory"],
-    queryFn: () => getSubCategories(category._id),
-  })
-  console.log(data)
+  const [productsData, setProductsData] = useState<Product[]>([])
 
   useEffect(() => {
-    if (data?.length) {
-      if (data[0].category === category._id) {
-        const SortedData = data.sort((cat1, cat2) => cat1.orderNsub - cat2.orderNsub)
-        setSubCategoryList(SortedData)
-      }
-    } else { setSubCategoryList([]) }
-
-    queryClient.invalidateQueries({ queryKey: ["SubCategory"] })
-  }, [data])
+    setSubCategoryList(category.subCategories)
+    setProductsData(category.products)
+  }, [category])
 
   if (subCategoryList.length) {
     return (
       <div className={styles.subCat_list}>
+        {productsData.filter(product => !product.subcategory).map(product => 
+          <ProductItem product={product} setAlertModal={setAlertModal} setDeletingItem={setDeletingItem} key={product._id} />
+        ) }
+        
         {subCategoryList.map(subcat =>
           <div key={subcat._id}>
             <h2 className={styles.subCat_name}>{subcat.nameSub}</h2>
+            
             <div className={styles.listado_productos}>
-              {productsData!.filter(product => product.category === category._id && product.subcategory === subcat._id).length ?
-                productsData!.filter(product => product.category === category._id && product.subcategory === subcat._id)
+              {productsData.filter(product => product.subcategory === subcat._id).length ?
+                productsData.filter(product => product.subcategory === subcat._id)
                   .sort((a, b) => a.idNumber - b.idNumber)
                   .map(product =>
                     <ProductItem product={product} setAlertModal={setAlertModal} setDeletingItem={setDeletingItem} key={product._id} />
@@ -67,7 +56,7 @@ export default function ProductsBySubCat({ category, productsData, setAlertModal
     )
   } else {
     return (
-      <div>
+      <div className={styles.listado_productos}>
         {//gets and sorts the products  of this category with no subCategory
           productsData!.filter(product => product.category === category._id && !product.subcategory)
             .sort((a, b) => a.idNumber - b.idNumber)

@@ -1,11 +1,11 @@
 import { SetStateAction, useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReactSortable, Sortable } from "react-sortablejs";
 import { toast } from "react-toastify";
 
 import styles from "@/styles/views/CategoriesView.module.css"
 import { Category } from "../../types/categoriesTypes";
-import { createSubCategory, getSubCategories, updateSubCategory, deleteSubCategory } from "../../api/SubCategoryAPI";
+import { createSubCategory, updateSubCategory, deleteSubCategory } from "../../api/SubCategoryAPI";
 import { SubCategory, SubCategoryData } from "../../types/subCategoriesTypes";
 
 //Components
@@ -32,6 +32,10 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
 
   const queryClient = useQueryClient()
 
+  useEffect(() => {
+    setSubCategoryList(category.subCategories.sort((cat1, cat2) => cat1.orderNsub - cat2.orderNsub))
+  }, [category])
+
   //querys for categories
   const queryCreateSubCategory = useMutation({
     mutationFn: createSubCategory,
@@ -39,15 +43,9 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
       toast.error(error.message)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["SubCategory"]})
       queryClient.invalidateQueries({ queryKey: ["categories"]})
       toast.success(data)
     }
-  })
-
-  const { data } = useQuery({
-    queryKey: ["SubCategory"],
-    queryFn: () => getSubCategories(category._id)
   })
 
   const queryUpdateSubCategory = useMutation({
@@ -56,7 +54,6 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
       toast.error(error.message)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["SubCategory"] })
       queryClient.invalidateQueries({ queryKey: ["categories"] })
       toast.success(data)
     }
@@ -75,22 +72,10 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
       toast.error(error.message)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["SubCategory"]})
       queryClient.invalidateQueries({ queryKey: ["categories"]})
       toast.success(data)
     }
   })
-
-  //categories api handlers
-  useEffect(() => {
-    if (data?.length) {
-      if(data[0].category === category._id) {
-      const SortedData = data.sort((cat1, cat2) => cat1.orderNsub - cat2.orderNsub)
-      setSubCategoryList(SortedData)
-      }
-    }
-    queryClient.invalidateQueries({ queryKey: ["SubCategory"] })
-  }, [data])
 
   function handleEditingSubCat(e: { target: { value: SetStateAction<string>; }; }) {
     setSubCatEditing(e.target.value)
@@ -131,13 +116,11 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
 
   const handleDeleteSubCat = () => {
     const { mutate } = queryDeleteSubCategory
-    const isLast = subCategoryList.length === 1
     const deleteData = {
       catId: category._id,
       subId: subCatEditingId
     }
     mutate(deleteData)
-    if (isLast) {setSubCategoryList([])}
   }
 
   async function handleSortSubCategories(evt: Sortable.SortableEvent) {
@@ -160,10 +143,8 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
 
     try {
       await Promise.all(updatePromises);
-      queryClient.invalidateQueries({ queryKey: ["SubCategory"]})
       queryClient.invalidateQueries({ queryKey: ["categories"]})
     } catch (error) {
-      // Manejar errores aquí
       console.error('Error al actualizar las sub-categorías:', error);
     }
   }

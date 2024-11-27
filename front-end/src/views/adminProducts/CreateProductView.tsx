@@ -16,9 +16,7 @@ export default function CreateProductView() {
       toast.error(error.message)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({queryKey: ["products"]})
       queryClient.invalidateQueries({queryKey: ["categories"]})
-      queryClient.invalidateQueries({queryKey: ["SubCategory"]})
       toast.success(data)
       navigate("/admin")
     }

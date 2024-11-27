@@ -4,9 +4,7 @@ export interface IProduct extends Document {
   idNumber: number,
   name: string,
   category: Types.ObjectId,
-  categoryName: string,
   subcategory: Types.ObjectId,
-  subcategoryName: string,
   ingredients: string,
   price: number,
   price2: number,
@@ -28,17 +26,9 @@ const ProductSchema: Schema = new Schema({
     ref: "Category",
     required: true
   },
-  categoryName: { 
-    type: String, 
-    trim: true
-  },
   subcategory: { 
     type: Types.ObjectId, 
     ref: "SubCategory"
-  },
-  subcategoryName: { 
-    type: String, 
-    trim: true
   },
   ingredients: { 
     type: String, 

@@ -72,7 +72,7 @@ const MenuProvider = ({ children }: props) => {
   const handleAgregarItem = (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
-    let pedidoNuevo: item[] = {...pedido}
+    let pedidoNuevo: item[] = pedido
     const item: item = {
       id: productoActual._id,
       categoria: productoActual.category,

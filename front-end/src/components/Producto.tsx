@@ -6,7 +6,7 @@ const Producto = ({ producto, isPizza }: { producto: Product, isPizza: boolean }
 
   function deliveryActivo() {
     if (delivery === true) {
-      if (producto.category === pizza && multisabor) {
+      if (producto.category !== pizza && multisabor) {
         setAlertPizza(true)
       } else {
         handleChangeModal()

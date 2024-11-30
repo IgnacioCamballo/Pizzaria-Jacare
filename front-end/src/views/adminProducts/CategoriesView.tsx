@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import styles from "@/styles/views/CategoriesView.module.css"
 import { createCategory, deleteCategory, getCategories, updateCategory } from "../../api/CategoryAPI";
 import { Category, CategoryData } from "../../types/categoriesTypes";
+import useMenu from "../../hooks/useMenu";
 
 //Components
 import CategoryModal from "../../components/admin/CategoryModal";
@@ -14,6 +15,8 @@ import AlertModal from "../../components/admin/AlertModal";
 import CategoryItem from "../../components/admin/CategoryItem";
 
 export default function CategoriesView() {
+  const {pizza} = useMenu()
+
   const [alertModal, setAlertModal] = useState(false)
   const [categoryList, setCategoryList] = useState<Category[]>([])
 
@@ -21,7 +24,7 @@ export default function CategoriesView() {
   const [catEditing, setCatEditing] = useState("")
   const [catEditingId, setCatEditingId] = useState("")
 
-  const ispizza = catEditingId === "6745a201863966676ae14433"
+  const ispizza = catEditingId === pizza
 
   const queryClient = useQueryClient()
 

@@ -19,8 +19,8 @@ export default function ProductsBySubCat({ category, setAlertModal, setDeletingI
   const [productsData, setProductsData] = useState<Product[]>([])
 
   useEffect(() => {
-    setSubCategoryList(category.subCategories)
-    setProductsData(category.products)
+    setSubCategoryList(category.subCategories.sort((a, b) => a.orderNsub - b.orderNsub))
+    setProductsData(category.products.sort((a, b) => a.idNumber - b.idNumber))
   }, [category])
 
   if (subCategoryList.length) {
@@ -36,11 +36,9 @@ export default function ProductsBySubCat({ category, setAlertModal, setDeletingI
             
             <div className={styles.listado_productos}>
               {productsData.filter(product => product.subcategory === subcat._id).length ?
-                productsData.filter(product => product.subcategory === subcat._id)
-                  .sort((a, b) => a.idNumber - b.idNumber)
-                  .map(product =>
-                    <ProductItem product={product} setAlertModal={setAlertModal} setDeletingItem={setDeletingItem} key={product._id} />
-                  ) :
+                productsData.filter(product => product.subcategory === subcat._id).map(product =>
+                  <ProductItem product={product} setAlertModal={setAlertModal} setDeletingItem={setDeletingItem} key={product._id} />
+                ) :
                 <p className={styles.texto_cat_sin_proyectos}>
                   Todavía no hay Productos para esta Sub Categoría {""}
                   <Link
@@ -58,11 +56,9 @@ export default function ProductsBySubCat({ category, setAlertModal, setDeletingI
     return (
       <div className={styles.listado_productos}>
         {//gets and sorts the products  of this category with no subCategory
-          productsData!.filter(product => product.category === category._id && !product.subcategory)
-            .sort((a, b) => a.idNumber - b.idNumber)
-            .map(product =>
-              <ProductItem product={product} setAlertModal={setAlertModal} setDeletingItem={setDeletingItem} key={product._id} />
-            )
+          productsData!.filter(product => product.category === category._id && !product.subcategory).map(product =>
+            <ProductItem product={product} setAlertModal={setAlertModal} setDeletingItem={setDeletingItem} key={product._id} />
+          )
         }
       </div>
     )

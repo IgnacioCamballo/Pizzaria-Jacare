@@ -6,7 +6,9 @@ export const SubCategorySchema = z.object({
   _id: z.string(),
   nameSub: z.string(),
   orderNsub: z.number(),
-  category: z.string()
+  category: z.string(),
+  priceSmall: z.number().optional(),
+  priceBig: z.number().optional()
 })
 
 export const adminSubCategorySchema = z.array(
@@ -14,9 +16,11 @@ export const adminSubCategorySchema = z.array(
     _id: true,
     nameSub: true,
     orderNsub: true,
-    category: true
+    category: true,
+    priceSmall: true,
+    priceBig: true
   })
 )
 
 export type SubCategory = z.infer<typeof SubCategorySchema>
-export type SubCategoryData = Pick<SubCategory, "nameSub" | "orderNsub">
+export type SubCategoryData = Pick<SubCategory, "nameSub" | "orderNsub" | "priceSmall" | "priceBig">

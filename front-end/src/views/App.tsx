@@ -9,9 +9,10 @@ import ModalProducto from "../components/ModalProducto"
 import Carrito from "../components/Carrito"
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
+import ModalAlertPizza from "../components/ModalAlertPizza"
 
 function App() {
-  const {modal, handleCerrarModal, carrito, setCarrito} = useMenu()
+  const {modal, handleCerrarModal, carrito, setCarrito, alertPizza, setAlertPizza} = useMenu()
 
   const handleClose = () => {
     setCarrito(false)
@@ -45,6 +46,17 @@ function App() {
           <AnimatePresence>
             <Carrito />
           </AnimatePresence>
+        </ReactModal>
+      )}
+      {alertPizza && (
+        <ReactModal 
+          isOpen={alertPizza} 
+          className="modal" 
+          overlayClassName="overlay" 
+          ariaHideApp={false}
+          onRequestClose={() => setAlertPizza(false)}
+        >
+          <ModalAlertPizza />
         </ReactModal>
       )}
       <ToastContainer autoClose={2500} pauseOnHover={false}/>

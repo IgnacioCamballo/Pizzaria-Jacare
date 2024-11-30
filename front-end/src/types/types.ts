@@ -1,7 +1,7 @@
 import {z} from "zod"
 
 export type item = {
-    id: number
+    id: string
     categoria: string
     cantidad: number
     tamaño: string
@@ -50,11 +50,12 @@ export type Product = z.infer<typeof ProductSchema>
 export type ProductForm = Pick<Product, "idNumber" | "name" | "category" | "subcategory" | "ingredients" | "price" | "price2" | "img">
 
 export type MenuContextProps = {
+    pizza: string,
     menu: string,
     desplegable: boolean,
     pedido: item[],
     modal: boolean,
-    productoActual: producto,
+    productoActual: Product,
     pizzaIncompleta: item,
     multisabor: boolean,
     delivery: boolean,
@@ -62,22 +63,23 @@ export type MenuContextProps = {
     tamaño: string,
     sabores: number,
     total: number,
+    alertPizza: boolean,
     setMenu: React.Dispatch<React.SetStateAction<string>>,
     setDesplegable: React.Dispatch<React.SetStateAction<boolean>>,
     setModal: React.Dispatch<React.SetStateAction<boolean>>,
-    setProductoActual: React.Dispatch<React.SetStateAction<producto>>,
+    setProductoActual: React.Dispatch<React.SetStateAction<Product>>,
     setDelivery: React.Dispatch<React.SetStateAction<boolean>>,
     setCarrito: React.Dispatch<React.SetStateAction<boolean>>,
     setTamaño: React.Dispatch<React.SetStateAction<string>>,
     setSabores: React.Dispatch<React.SetStateAction<number>>,
     setPrecio: React.Dispatch<React.SetStateAction<number>>,
+    setAlertPizza: React.Dispatch<React.SetStateAction<boolean>>,
     handleAgregarItem: (e: {preventDefault: () => void;}) => void,
-    handleEliminarItem: (id: number) => void,
+    handleEliminarItem: (id: string) => void,
     handleRestarCantidad: (item: item) => void,
     handleSumarCantidad: (item: item) => void,
     handleChangeModal: () => void,
     handleCerrarModal: () => void,
     handleChangeCarrito: () => void,
-    handleRealizarPedido: () => void,
-    calcularPrecio: () => void,
+    handleRealizarPedido: () => void
 }

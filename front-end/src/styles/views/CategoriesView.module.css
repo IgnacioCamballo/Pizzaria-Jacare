@@ -90,6 +90,16 @@
   padding: 1rem 2rem;
 }
 
+@media (max-width: 576px) {
+  .category {
+    flex-direction: column-reverse;
+  }
+
+  .cat_name_side {
+    padding-top: 0rem;
+  }
+}
+
 .arrow {
   rotate: -90deg;
   cursor: pointer;
@@ -98,7 +108,8 @@
 
 .opacity0 {
   opacity: 0;
-  cursor: default
+  cursor: default;
+  width: 0rem;
 }
 
 .arrow_active {
@@ -134,6 +145,34 @@
   border-radius: 0.25rem;
 }
 
+.price_menu {
+  display: flex;
+  align-items: center;
+}
+
+.prices_subCat_span {
+  font-weight: 700;
+  color: black;
+}
+
+.prices_subCat {
+  font-size: large;
+  font-weight: 500;
+  color: var(--color-letras1);
+  margin-top: 0rem;
+}
+
+@media (max-width: 576px) {
+  .subCategory_container {
+    flex-direction: column-reverse;
+    padding-bottom: 1rem;
+  }
+
+  .price_menu {
+    flex-direction: column-reverse;
+  }
+}
+
 .modal_form {
   display: flex;
   flex-direction: column;
@@ -146,6 +185,40 @@
 .input {
   font-size: large;
   padding: 0.25rem;
+}
+
+.price_size {
+  display: flex;
+  align-items: center;
+}
+
+.R {
+  margin: 0rem;
+  padding: 0rem;
+  color: black;
+  font-size: large;
+  transform: translateY(2px);
+}
+
+.input_number {
+  font-size: large;
+  padding: 0.25rem;
+  width: 4rem;
+  transform: translateY(3px);
+}
+
+.modal_buttons {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+.modal_input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .modal_button {

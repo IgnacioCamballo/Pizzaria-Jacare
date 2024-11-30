@@ -1,13 +1,44 @@
-import Submenu from "./Submenu"
-import precios from "../data/precios.json"
+import { useQuery } from "@tanstack/react-query"
+
+import { getCategories } from "../api/CategoryAPI"
 import useMenu from "../hooks/useMenu"
 
+import Submenu from "./Submenu"
+import { useEffect, useState } from "react"
+import { Category } from "../types/categoriesTypes"
+import Producto from "./Producto"
+
 const Menu = () => {
-  const {menu, setMenu, multisabor, delivery, setDelivery} = useMenu()
+  const {pizza, menu, setMenu, delivery, setDelivery} = useMenu()
+  const [sortedCategories, setSortedCategories] = useState<Category[]>([])
+  const [CategoryList, setCategoryList] = useState<Category[]>([])
+
+  const {data, isLoading} = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories
+  })
+
+  useEffect(() => {
+    if(data) {
+      setSortedCategories(data.sort((a,b) => a.orderN - b.orderN))
+      setCategoryList(data.sort((a,b) => a.orderN - b.orderN))
+    }
+  }, [data, menu])
+
+  useEffect(() => {
+    if(data) {
+      if(menu === "Tudo") {
+        setSortedCategories(data!.sort((a,b) => a.orderN - b.orderN))
+      } else {
+        setSortedCategories(data!.filter(categ => categ._id === menu))
+      }
+    }
+  }, [menu])
 
   const handleChangeDelivery = () => {
     setDelivery(!delivery)
   }
+  if(isLoading) return (<p className="isLoading_menu">Cargando Menú...</p>)
 
   return (
     <section className="seccion_menu" id="menu">
@@ -18,9 +49,15 @@ const Menu = () => {
         
         <div className="botones">
           <button aria-label="mostrar tudo o menu" className={menu === "Tudo" ? "resaltado" : "transparente"} onClick={() => setMenu("Tudo")}>Tudo</button>
-          <button aria-label="mostrar so pizzas" className={menu === "Pizza" ? "resaltado" : "transparente"} onClick={() => setMenu("Pizza")}>Pizza</button>
-          <button aria-label="mostrar so pratos" className={menu === "Prato" ? "resaltado" : "transparente"} onClick={() => setMenu("Prato")}>Prato</button>
-          <button aria-label="mostrar so bebidas" className={menu === "Bebidas" ? "resaltado" : "transparente"} onClick={() => setMenu("Bebidas")}>Bebidas</button>
+          
+          {CategoryList.map(categ => (
+            <button 
+              key={categ._id}
+              aria-label={`mostrar so ${categ.name}`} 
+              className={menu === categ._id ? "resaltado" : "transparente"} 
+              onClick={() => setMenu(categ._id)}
+            >{categ.name}</button>
+          ))}
         </div>
         
         <div className="delivery">
@@ -35,7 +72,31 @@ const Menu = () => {
         </div>   
       </div>
 
-      {(menu === "Pizza" || menu === "Tudo") && (
+      {sortedCategories.map(category => (menu === category._id || "Tudo") && (
+        <div key={category._id} className="general_products_container">
+          <div className={`titulo_submenuCat ${category._id === pizza && "marginB0"}`}>{category.name}</div>
+
+          <div className="contenedor_productos_mostrados">
+            {category.products.filter(product => !product.subcategory).sort((a, b) => a.idNumber - b.idNumber).map(product => (
+              <Producto key={product._id} producto={product} isPizza={product.category === pizza}/>
+            ))}
+          </div>
+
+          {category.subCategories.sort((a, b) => a.orderNsub - b.orderNsub).map(subCat => (
+            <Submenu 
+              key={subCat._id}
+              subCategory={subCat}
+              products={category.products.filter(product => product.subcategory === subCat._id).sort((a, b) => a.idNumber - b.idNumber)}
+            />
+          ))}
+        </div>
+      ))}
+
+
+
+
+
+      {/* {(menu === "Pizza" || menu === "Tudo") && (
         <>
           {precios.map(precio => (
             <Submenu 
@@ -59,7 +120,7 @@ const Menu = () => {
           <Submenu categoria={"Aguas"} precioGrande={0} precioMedia={0}/>
         </>
       )}
-      
+       */}
     </section>
   )
 }

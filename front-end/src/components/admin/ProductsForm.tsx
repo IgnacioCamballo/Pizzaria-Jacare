@@ -3,6 +3,7 @@ import { UseMutateFunction, useQuery } from "@tanstack/react-query";
 import styles from "@/styles/views/ActionsProjectView.module.css"
 import ErrorMessage from "./ErrorMessage";
 import { getCategories } from "../../api/CategoryAPI";
+import useMenu from "../../hooks/useMenu";
 
 //Components
 import { Product, ProductForm } from "../../types/types";
@@ -17,6 +18,8 @@ type ProjectFormProps = {
 }
 
 export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, isCreate }: ProjectFormProps) {
+  const {pizza} = useMenu()
+
   const [productId] = useState<Product["_id"]>(isCreate ? "" : editingData!._id)
   const [idNumber, setIdNumber] = useState<ProductForm["idNumber"]>(isCreate ? 0 : editingData!.idNumber) 
   const [name, setName] = useState<ProductForm["name"]>(isCreate ? "" : editingData!.name) 
@@ -33,18 +36,27 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
     queryKey: ["categories"],
     queryFn: getCategories
   })
+
+
   
   //Checks if actual category name is pizza and change to double price and price names
-  const ispizza = category === "6745a201863966676ae14433"
+  const ispizza = category === pizza
   
   //Gets the corresponding sub categories for the selected categories and renders the sub categories section
   const actualCategorySubs = data?.find(dataCategory => dataCategory._id === category)?.subCategories
   const isSubCat = category === "" ? false : actualCategorySubs?.length ? true : false
 
   useEffect(() => {
-    if(!ispizza) {setPrice2(0), setIngredients("")}
     if(!isSubCat) {setSubcategory(null)}
-  }, [category])
+    if(!ispizza) {
+      setPrice2(0) 
+      setIngredients("")
+    } else {
+      if(subcategory)
+      setPrice(data?.find(cat => cat._id === category)?.subCategories.find(subcat => subcat._id === subcategory)?.priceBig!)
+      setPrice2(data?.find(cat => cat._id === category)?.subCategories.find(subcat => subcat._id === subcategory)?.priceSmall!)
+    }
+  }, [category, subcategory])
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -166,6 +178,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
           {ispizza ? "Precio pizza grande" : "Precio *"}
         </label>
         <input
+          disabled={ispizza && subcategory !== "" && subcategory !== null}
           id="price"
           className={styles.input}
           type="number"
@@ -184,6 +197,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
           Precio pizza pequeña
         </label>
         <input
+          disabled={subcategory !== "" && subcategory !== null}
           id="price2"
           className={styles.input}
           type="number"

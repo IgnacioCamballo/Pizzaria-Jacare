@@ -1,42 +1,42 @@
-import productos from "../data/productos.json";
-import { producto } from "../types/types";
+import useMenu from "../hooks/useMenu";
+import { SubCategory } from "../types/subCategoriesTypes";
+import { Product } from "../types/types";
 import Producto from "./Producto";
 
 type props = {
-    categoria: string
-    precioGrande: number
-    precioMedia: number
+  subCategory: SubCategory
+  products: Product[]
 }
 
-const Submenu = ({categoria, precioGrande, precioMedia}:props) => {
-    const primerLetra = categoria?.charAt(0)
-    const sinPrimerLetra = categoria?.slice(1)
+const Submenu = ({ subCategory, products }: props) => {
+  const {pizza} = useMenu()
+  const isPizza = subCategory.category === pizza
 
-    return (
+  return (
     <>
-        <div className="cabeza_submenu">
-            <div className="titulo_submenu"><span className="letra_verde">{primerLetra}</span>{sinPrimerLetra}</div>
-            {precioGrande !== 0 && (
-                <>
-                    <div className="descripcion_pizza">
-                        <p className="tamaño">Grande R$ {precioGrande}</p>
-                        <p className="cm">35cm  12 fatias  3 sabores</p>
-                    </div>
+      <div className="cabeza_submenu">
+        <div className="titulo_submenu">{subCategory.nameSub}</div>
+        {isPizza && (
+          <>
+            <div className="descripcion_pizza">
+              <p className="tamaño">Grande R$ {subCategory.priceBig}</p>
+              <p className="cm">35cm  12 fatias  3 sabores</p>
+            </div>
 
-                    <div className="descripcion_pizza">
-                        <p className="tamaño">Media R$ {precioMedia}</p>
-                        <p className="cm">30cm  8 fatias  2 sabores</p>
-                    </div>
-                </>
-            )}
-        </div>
+            <div className="descripcion_pizza">
+              <p className="tamaño">Media R$ {subCategory.priceSmall}</p>
+              <p className="cm">30cm  8 fatias  2 sabores</p>
+            </div>
+          </>
+        )}
+      </div>
 
-        <div className="contenedor_productos_mostrados">
-            {productos.filter(producto => producto.subcategoria === categoria).map((producto: producto) => (
-                <Producto key={producto.id} producto={producto}/>
-            ))}
-        </div>
-        
+      <div className="contenedor_productos_mostrados">
+        {products.map(product => (
+          <Producto key={product._id} producto={product} isPizza={isPizza}/>
+        ))}
+      </div>
+
     </>
   )
 }

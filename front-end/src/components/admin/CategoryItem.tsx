@@ -21,14 +21,22 @@ type CategoryItemProps = {
   deleteCategory: () => void
 }
 
+const initialSubCat = {
+  _id: "", 
+  nameSub: "", 
+  orderNsub: 0, 
+  category: "", 
+  priceSmall: 0,
+  priceBig: 0
+}
+
 export default function CategoryItem({ category, editCategory, deleteCategory }: CategoryItemProps) {
   const [showSubs, setShowSubs] = useState(false)
   const [subCategoryList, setSubCategoryList] = useState<SubCategory[]>([])
   const [alertModal, setAlertModal] = useState(false)
 
   const [subCatModal, setSubCatModal] = useState(false)
-  const [subCatEditing, setSubCatEditing] = useState("")
-  const [subCatEditingId, setSubCatEditingId] = useState("")
+  const [subCatEditing, setSubCatEditing] = useState<SubCategory>(initialSubCat)
 
   const queryClient = useQueryClient()
 
@@ -77,20 +85,30 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
     }
   })
 
-  function handleEditingSubCat(e: { target: { value: SetStateAction<string>; }; }) {
-    setSubCatEditing(e.target.value)
+  function handleEditingSubCat(e: React.ChangeEvent<HTMLInputElement>) {
+    if(e.target.id === "subCatName") {
+      setSubCatEditing({...subCatEditing, nameSub: e.target.value})
+    }
+    if(e.target.id === "priceBig") {
+      setSubCatEditing({...subCatEditing, priceBig: parseInt(e.target.value)})
+    }
+    if(e.target.id === "priceSmall") {
+      setSubCatEditing({...subCatEditing, priceSmall: parseInt(e.target.value)})
+    }
   }
 
   const handleSubmitSubCat = (e: { preventDefault: () => void; }) => {
     e.preventDefault()
 
-    if (subCatEditingId === "") {
+    if (subCatEditing._id === "") {
       //creates new category
       const { mutate } = queryCreateSubCategory
 
       const formData: SubCategoryData = {
-        nameSub: subCatEditing,
-        orderNsub: subCategoryList.length
+        nameSub: subCatEditing.nameSub,
+        orderNsub: subCategoryList.length,
+        priceSmall: subCatEditing.priceSmall,
+        priceBig: subCatEditing.priceBig
       }
       const data = {
         formData: formData,
@@ -104,10 +122,12 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
       const { mutate } = queryUpdateSubCategory
 
       const formData: SubCategoryData = {
-        nameSub: subCatEditing,
-        orderNsub: subCategoryList.find(cat => cat._id === subCatEditingId)?.orderNsub!
+        nameSub: subCatEditing.nameSub,
+        orderNsub: subCategoryList.find(cat => cat._id === subCatEditing._id)?.orderNsub!,
+        priceSmall: subCatEditing.priceSmall,
+        priceBig: subCatEditing.priceBig
       }
-      const data = { formData, catId: category._id, subId: subCatEditingId }
+      const data = { formData, catId: category._id, subId: subCatEditing._id }
 
       mutate(data)
       onCloseModal()
@@ -118,7 +138,7 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
     const { mutate } = queryDeleteSubCategory
     const deleteData = {
       catId: category._id,
-      subId: subCatEditingId
+      subId: subCatEditing._id
     }
     mutate(deleteData)
   }
@@ -136,7 +156,10 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
     }))
 
     const updatePromises = newCatList.map(subCatNew => {
-      const formData = { nameSub: subCatNew.nameSub, orderNsub: subCatNew.orderNsub };
+      const formData = { 
+        nameSub: subCatNew.nameSub, 
+        orderNsub: subCatNew.orderNsub
+      };
       const data = { formData, catId: category._id, subId: subCatNew._id };
       return querySortSubCategories.mutateAsync(data);
     });
@@ -151,14 +174,13 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
 
   //gets the name of the item trying to delete
   function nameDeletingSubCat() {
-    const subCategoryName = subCategoryList.find(product => product._id === subCatEditingId)?.nameSub
+    const subCategoryName = subCategoryList.find(subCat => subCat._id === subCatEditing._id)?.nameSub
     return subCategoryName
   }
 
   const onCloseModal = () => {
     setSubCatModal(false)
-    setSubCatEditing("")
-    setSubCatEditingId("")
+    setSubCatEditing(initialSubCat)
   }
 
   return (
@@ -198,11 +220,15 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
           {subCategoryList.map(subCat =>
             <li key={subCat._id} className={styles.subCategory_container}>
                 <h2 className={styles.category_name}>{subCat.nameSub}</h2>
+
+                <div className={styles.price_menu}>
+                  <p className={styles.prices_subCat}><span className={styles.prices_subCat_span}>G:</span> R${subCat.priceBig} <span className={styles.prices_subCat_span}>M:</span> R${subCat.priceSmall}</p>  
                 
-                <SubCategoryMenu
-                  onClic1={() => { setSubCatModal(true), setSubCatEditing(subCat.nameSub), setSubCatEditingId(subCat._id) }}
-                  onClic2={() => { setAlertModal(true), setSubCatEditingId(subCat._id) }}
-                />
+                  <SubCategoryMenu
+                    onClic1={() => { setSubCatModal(true), setSubCatEditing(subCat)}}
+                    onClic2={() => { setAlertModal(true), setSubCatEditing(subCat)}}
+                  />
+                </div>
             </li>
           )}
         </ReactSortable>
@@ -216,15 +242,15 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
           onSubmit={handleSubmitSubCat}
           onEdit={handleEditingSubCat}
           subCatEditing={subCatEditing}
-          catName={category.name}
+          category={category}
         />
       }
 
       {alertModal && (
         <AlertModal
           message={`Seguro que deseas eliminar ${nameDeletingSubCat()}`}
-          onCancel={() => { setAlertModal(false), setSubCatEditingId("") }}
-          onConfirm={() => { handleDeleteSubCat(), setAlertModal(false), setSubCatEditingId("") }}
+          onCancel={() => { setAlertModal(false), setSubCatEditing(initialSubCat) }}
+          onConfirm={() => { handleDeleteSubCat(), setAlertModal(false), setSubCatEditing(initialSubCat) }}
         />
       )}
     </li>

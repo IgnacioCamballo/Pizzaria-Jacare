@@ -8,7 +8,8 @@ import useMenu from "../../hooks/useMenu";
 //Components
 import { Product, ProductForm } from "../../types/types";
 import SubCatSelect from "./SubCatSelect";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import CloseXSVG from "../svg/CloseXSVG";
 
 type ProjectFormProps = {
   mutateCreate?: UseMutateFunction<any, Error, ProductForm, unknown>,
@@ -28,17 +29,14 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
   const [ingredients, setIngredients] = useState<ProductForm["ingredients"]>(isCreate ? "" : editingData?.ingredients) 
   const [price, setPrice] = useState<ProductForm["price"]>(isCreate ? 0 : editingData!.price) 
   const [price2, setPrice2] = useState<ProductForm["price2"]>(isCreate ? 0 : editingData?.price2) 
-  const [img, setImg] = useState<ProductForm["img"]>(isCreate ? "" : editingData?.img) 
+  const [img, setImg] = useState<ProductForm["img"]>(isCreate ? {name: "", url: "", id: ""} : editingData!.img) 
   const [error, setError] = useState(false)
-
 
   const {data} = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories
   })
 
-
-  
   //Checks if actual category name is pizza and change to double price and price names
   const ispizza = category === pizza
   
@@ -57,6 +55,16 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
       setPrice2(data?.find(cat => cat._id === category)?.subCategories.find(subcat => subcat._id === subcategory)?.priceSmall!)
     }
   }, [category, subcategory])
+
+  //manage the image upload to cloudinary
+  const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
+
+  }
+
+  const deleteImg = async () => { 
+    
+    setImg({name: "", url: "", id: ""})
+  }
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -211,15 +219,24 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
         <label htmlFor="img" className={styles.label}>
           Foto del producto
         </label>
-        <input
+        {img.name !== "" ?
+          <div id="img" className={styles.input}>
+            <p className={styles.input_p}>{img.name}</p>
+
+            <CloseXSVG className={styles.close_button} onClick={() => deleteImg()}/>
+          </div>
+        : 
+          <input
           id="img"
           className={styles.input}
-          type="text"
+          type="file"
           placeholder="Foto del producto"
-          value={img}
-          onChange={(e) => setImg(e.target.value)}
-        />
+          onChange={(e) => uploadImage(e)}
+          />
+        }
       </div>
+
+      <img src={img.url}/>
 
       <button
         type="submit"

@@ -1,4 +1,5 @@
 import type { Request, Response } from "express"
+
 import Product from "../models/Product"
 import Category from "../models/Categories"
 import SubCategory from "../models/SubCategories"
@@ -122,3 +123,5 @@ export class ProductController {
     }
   }
 }
+
+

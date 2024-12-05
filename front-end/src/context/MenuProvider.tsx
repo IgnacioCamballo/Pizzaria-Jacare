@@ -10,7 +10,7 @@ interface props {
 const MenuContext = createContext<MenuContextProps>({} as MenuContextProps)
 
 const MenuProvider = ({ children }: props) => {
-  const pizza = "6745a201863966676ae14433"
+  const pizza = "674f750add362637b281687d"
 
   const [menu, setMenu] = useState("Tudo")
   const [desplegable, setDesplegable] = useState(false)

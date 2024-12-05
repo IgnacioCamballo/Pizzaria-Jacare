@@ -95,7 +95,19 @@
     border-color: #E5E7EB; 
     width: 100%;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.input_p {
+    margin: 0rem;
+    padding-block: 1px;
+}
+
+.close_button {
+    margin-right: 1rem;
+    cursor: pointer;
 }
 
 .error {

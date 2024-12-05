@@ -8,7 +8,11 @@ export interface IProduct extends Document {
   ingredients: string,
   price: number,
   price2: number,
-  img: string
+  img: {
+    name: string,
+    url: string,
+    id: string
+  }
 }
 
 const ProductSchema: Schema = new Schema({
@@ -44,7 +48,7 @@ const ProductSchema: Schema = new Schema({
     trim: true
   },
   img: { 
-    type: String, 
+    type: Object, 
     trim: true
   }
 }, {timestamps: true})

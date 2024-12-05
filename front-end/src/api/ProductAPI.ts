@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "../lib/axios";
-import { adminProductSchema, Product, ProductForm } from "../types/types";
+import { ProductSchema, Product, ProductForm } from "../types/types";
 
 
 export async function createProduct(formData: ProductForm) {
@@ -17,7 +17,7 @@ export async function createProduct(formData: ProductForm) {
 export async function getProducts() {
   try {
     const { data } = await api("/products")
-    const response = adminProductSchema.safeParse(data)
+    const response = ProductSchema.safeParse(data)
     if(response.success) {return response.data}
   } catch (error) {
     if(isAxiosError(error) && error.response) {

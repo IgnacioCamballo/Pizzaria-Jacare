@@ -1,9 +1,10 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReactSortable, Sortable } from "react-sortablejs";
 import { toast } from "react-toastify";
 
 import styles from "@/styles/views/CategoriesView.module.css"
+import useMenu from "../../hooks/useMenu";
 import { Category } from "../../types/categoriesTypes";
 import { createSubCategory, updateSubCategory, deleteSubCategory } from "../../api/SubCategoryAPI";
 import { SubCategory, SubCategoryData } from "../../types/subCategoriesTypes";
@@ -39,6 +40,8 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
   const [subCatEditing, setSubCatEditing] = useState<SubCategory>(initialSubCat)
 
   const queryClient = useQueryClient()
+
+  const {pizza} = useMenu()
 
   useEffect(() => {
     setSubCategoryList(category.subCategories.sort((cat1, cat2) => cat1.orderNsub - cat2.orderNsub))
@@ -222,7 +225,7 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
                 <h2 className={styles.category_name}>{subCat.nameSub}</h2>
 
                 <div className={styles.price_menu}>
-                  <p className={styles.prices_subCat}><span className={styles.prices_subCat_span}>G:</span> R${subCat.priceBig} <span className={styles.prices_subCat_span}>M:</span> R${subCat.priceSmall}</p>  
+                  {category._id === pizza && <p className={styles.prices_subCat}><span className={styles.prices_subCat_span}>G:</span> R${subCat.priceBig} <span className={styles.prices_subCat_span}>M:</span> R${subCat.priceSmall}</p>}  
                 
                   <SubCategoryMenu
                     onClic1={() => { setSubCatModal(true), setSubCatEditing(subCat)}}

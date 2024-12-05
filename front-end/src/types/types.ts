@@ -12,14 +12,6 @@ export type item = {
     precio: number
 }
 
-export type producto = {
-    id: string
-    nombre: string
-    categoria: string
-    subcategoria: string
-    ingredientes: number | string
-}
-
 export const ProductSchema = z.object({
     _id: z.string(),
     idNumber: z.number(),
@@ -29,22 +21,12 @@ export const ProductSchema = z.object({
     ingredients: z.string().optional(),
     price: z.number(),
     price2: z.number().optional(),
-    img: z.string().optional()
-})
-
-export const adminProductSchema = z.array(
-    ProductSchema.pick({
-        _id: true,
-        idNumber: true,
-        name: true,
-        category: true,
-        subcategory: true,
-        ingredients: true,
-        price: true,
-        price2: true,
-        img: true
+    img: z.object({
+        name: z.string(),
+        url: z.string(),
+        id: z.string()
     })
-)
+})
 
 export type Product = z.infer<typeof ProductSchema>
 export type ProductForm = Pick<Product, "idNumber" | "name" | "category" | "subcategory" | "ingredients" | "price" | "price2" | "img">

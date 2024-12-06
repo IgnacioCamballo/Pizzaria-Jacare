@@ -1,20 +1,23 @@
 import { UseMutateAsyncFunction, useMutation, useQuery } from "@tanstack/react-query";
+import { ChangeEvent, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { Cloudinary } from '@cloudinary/url-gen';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage, lazyload } from '@cloudinary/react';
+import { fill } from '@cloudinary/url-gen/actions/resize';
 
 import styles from "@/styles/views/ActionsProjectView.module.css"
 import ErrorMessage from "./ErrorMessage";
 import { getCategories } from "../../api/CategoryAPI";
 import useMenu from "../../hooks/useMenu";
+import { deleteImage, updateImage } from "../../api/CloudinaryAPI";
+import { Product, ProductForm } from "../../types/types";
 
 //Components
-import { Product, ProductForm } from "../../types/types";
 import SubCatSelect from "./SubCatSelect";
-import { ChangeEvent, useEffect, useState } from "react";
 import CloseXSVG from "../svg/CloseXSVG";
-import { deleteImage, updateImage } from "../../api/CloudinaryAPI";
-import { toast } from "react-toastify";
 import ModalAlert from "../ModalAlert";
 import ReactModal from "react-modal";
-import CloudImage from "../CloudImage";
 
 type ProjectFormProps = {
   mutateCreate?: UseMutateAsyncFunction<any, Error, ProductForm, unknown>,
@@ -60,6 +63,13 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
       setLoading(false)
     }
   })
+
+  const cld = new Cloudinary({ cloud: { cloudName: 'diy7juddz' }})
+  const image = cld
+    .image(img)
+    .format('auto')
+    .quality('auto')
+    .resize(fill().width(160).height(160).gravity(autoGravity()))
 
   //Checks if actual category name is pizza and change to double price and price names
   const ispizza = category === pizza
@@ -294,7 +304,9 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
 
         {(img !== "") ?
           <div id="img" className={styles.image}>
-            <CloudImage public_id={img} height={160} width={160}/>
+            <div className={styles.temporary_img}>
+              <AdvancedImage cldImg={image} plugins={[lazyload()]}/>
+            </div>
             <CloseXSVG className={styles.close_button} onClick={() => deleteImg()} />
           </div>
           :

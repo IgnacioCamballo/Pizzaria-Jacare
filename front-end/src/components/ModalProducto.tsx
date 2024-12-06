@@ -1,5 +1,9 @@
 import { useEffect } from "react"
 import useMenu from "../hooks/useMenu"
+import { Cloudinary } from '@cloudinary/url-gen';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage, lazyload } from '@cloudinary/react';
+import { fill } from '@cloudinary/url-gen/actions/resize';
 
 const ModalProducto = () => {
   const {
@@ -13,6 +17,13 @@ const ModalProducto = () => {
     handleAgregarItem,
     handleCerrarModal
   } = useMenu()
+
+  const cld = new Cloudinary({ cloud: { cloudName: 'diy7juddz' }})
+  const img = cld
+    .image(productoActual.img)
+    .format('auto')
+    .quality('auto')
+    .resize(fill().width(120).height(120).gravity(autoGravity()))
 
   useEffect(() => {
     if(productoActual.category === pizza)
@@ -29,7 +40,9 @@ const ModalProducto = () => {
 
   return (
     <div className="contenedor_producto_modal">
-      <img className="foto_producto" src={productoActual.img} alt="foto" />
+      <div className="foto_modal_producto">
+        <AdvancedImage cldImg={img} plugins={[lazyload()]}/>
+      </div>
 
       <form
         className="texto_producto"

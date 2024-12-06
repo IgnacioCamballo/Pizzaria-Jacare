@@ -550,6 +550,16 @@ body {
   overflow: hidden;
 }
 
+.foto_modal_producto {
+  margin: 10px;
+  width: fit-content;
+  min-width: 7.5rem;
+  height: 7.5rem;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
 .texto_producto {
   height: 100%;
   display: flex;

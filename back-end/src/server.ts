@@ -7,6 +7,7 @@ import { corsConfig } from "./config/cors"
 import {connectDB} from "./config/db"
 import productRoutes from "./routes/productRoutes"
 import categoryRoutes from "./routes/categoryRoutes"
+import cloudinaryRoutes from "./routes/cloudinaryRoutes"
 
 dotenv.config()
 
@@ -24,6 +25,7 @@ app.use(express.json())
 // Routes
 app.use("/api/products", productRoutes)
 app.use("/api/categories", categoryRoutes)
+app.use("/api/cloudinary", cloudinaryRoutes)
 
 
 export default app

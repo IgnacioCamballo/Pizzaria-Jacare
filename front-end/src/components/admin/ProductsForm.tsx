@@ -1,4 +1,4 @@
-import { UseMutateFunction, useQuery } from "@tanstack/react-query";
+import { UseMutateAsyncFunction, useMutation, useQuery } from "@tanstack/react-query";
 
 import styles from "@/styles/views/ActionsProjectView.module.css"
 import ErrorMessage from "./ErrorMessage";
@@ -10,85 +10,157 @@ import { Product, ProductForm } from "../../types/types";
 import SubCatSelect from "./SubCatSelect";
 import { ChangeEvent, useEffect, useState } from "react";
 import CloseXSVG from "../svg/CloseXSVG";
+import { deleteImage, updateImage } from "../../api/CloudinaryAPI";
+import { toast } from "react-toastify";
+import ModalAlert from "../ModalAlert";
+import ReactModal from "react-modal";
+import CloudImage from "../CloudImage";
 
 type ProjectFormProps = {
-  mutateCreate?: UseMutateFunction<any, Error, ProductForm, unknown>,
-  mutateUpdate?: UseMutateFunction<any, Error, {formData: ProductForm, productId: Product["_id"]}, unknown>,
+  mutateCreate?: UseMutateAsyncFunction<any, Error, ProductForm, unknown>,
+  mutateUpdate?: UseMutateAsyncFunction<any, Error, { formData: ProductForm, productId: Product["_id"] }, unknown>,
   editingData?: Product,
   isCreate: boolean
 }
 
 export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, isCreate }: ProjectFormProps) {
-  const {pizza} = useMenu()
+  const { pizza } = useMenu()
 
   const [productId] = useState<Product["_id"]>(isCreate ? "" : editingData!._id)
-  const [idNumber, setIdNumber] = useState<ProductForm["idNumber"]>(isCreate ? 0 : editingData!.idNumber) 
-  const [name, setName] = useState<ProductForm["name"]>(isCreate ? "" : editingData!.name) 
-  const [category, setCategory] = useState<ProductForm["category"]>(isCreate ? "" : editingData!.category) 
-  const [subcategory, setSubcategory] = useState<ProductForm["subcategory"]>(isCreate ? "" : editingData?.subcategory) 
-  const [ingredients, setIngredients] = useState<ProductForm["ingredients"]>(isCreate ? "" : editingData?.ingredients) 
-  const [price, setPrice] = useState<ProductForm["price"]>(isCreate ? 0 : editingData!.price) 
-  const [price2, setPrice2] = useState<ProductForm["price2"]>(isCreate ? 0 : editingData?.price2) 
-  const [img, setImg] = useState<ProductForm["img"]>(isCreate ? {name: "", url: "", id: ""} : editingData!.img) 
+  const [idNumber, setIdNumber] = useState<ProductForm["idNumber"]>(isCreate ? 0 : editingData!.idNumber)
+  const [name, setName] = useState<ProductForm["name"]>(isCreate ? "" : editingData!.name)
+  const [category, setCategory] = useState<ProductForm["category"]>(isCreate ? "" : editingData!.category)
+  const [subcategory, setSubcategory] = useState<ProductForm["subcategory"]>(isCreate ? "" : editingData?.subcategory)
+  const [ingredients, setIngredients] = useState<ProductForm["ingredients"]>(isCreate ? "" : editingData?.ingredients)
+  const [price, setPrice] = useState<ProductForm["price"]>(isCreate ? 0 : editingData!.price)
+  const [price2, setPrice2] = useState<ProductForm["price2"]>(isCreate ? 0 : editingData?.price2)
+  const [img, setImg] = useState<ProductForm["img"]>(isCreate ? "" : editingData!.img)
   const [error, setError] = useState(false)
+  const [newImg, setNewImg] = useState("")
+  const [sizeAlert, setSizeAlert] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const {data} = useQuery({
+  const { data } = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories
   })
 
+  const { mutateAsync } = useMutation({
+    mutationFn: updateImage,
+    onError: (error) => {
+      toast.error(error.message)
+      setLoading(false)
+    }
+  })
+ 
+  const deleteImageCloudinary = useMutation({
+    mutationFn: deleteImage,
+    onError: (error) => {
+      toast.error(error.message)
+      setLoading(false)
+    }
+  })
+
   //Checks if actual category name is pizza and change to double price and price names
   const ispizza = category === pizza
-  
+
   //Gets the corresponding sub categories for the selected categories and renders the sub categories section
   const actualCategorySubs = data?.find(dataCategory => dataCategory._id === category)?.subCategories
   const isSubCat = category === "" ? false : actualCategorySubs?.length ? true : false
 
   useEffect(() => {
-    if(!isSubCat) {setSubcategory(null)}
-    if(!ispizza) {
-      setPrice2(0) 
+    if (!isSubCat) { setSubcategory(null) }
+    if (!ispizza) {
+      setPrice2(0)
       setIngredients("")
     } else {
-      if(subcategory)
-      setPrice(data?.find(cat => cat._id === category)?.subCategories.find(subcat => subcat._id === subcategory)?.priceBig!)
+      if (subcategory)
+        setPrice(data?.find(cat => cat._id === category)?.subCategories.find(subcat => subcat._id === subcategory)?.priceBig!)
       setPrice2(data?.find(cat => cat._id === category)?.subCategories.find(subcat => subcat._id === subcategory)?.priceSmall!)
     }
   }, [category, subcategory])
 
   //manage the image upload to cloudinary
   const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files![0]
+    if (file.size > 100 * 1024) {
+      setSizeAlert(true)
+      e.target.value = ""
+      return
+    }
 
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = () => {
+      setNewImg(reader.result!.toString())
+    }
   }
 
-  const deleteImg = async () => { 
-    
-    setImg({name: "", url: "", id: ""})
+  const deleteImg = async () => {
+    setNewImg("")
+    setImg("")
   }
 
-  const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
 
     if (name === "" || category === "" || price === 0) {
       setError(true)
       return
     }
-    const formData = {
-      idNumber,
-      name,
-      category,
-      subcategory,
-      ingredients,
-      price,
-      price2,
-      img
+
+    //if old img is different of newImg deletes from cloudinary old img
+    if (editingData?.img !== img) {
+      const {mutate} = deleteImageCloudinary
+      mutate(editingData!.img)
     }
-    
-    if (isCreate) {
-      mutateCreate!(formData)
+
+    //if new img it upload it on cloudinary
+    if (newImg !== "") {
+      try {
+        const uploadedImage = await mutateAsync(newImg)
+        const formData = {
+          idNumber,
+          name,
+          category,
+          subcategory,
+          ingredients,
+          price,
+          price2,
+          img: uploadedImage
+        }
+
+        if (isCreate) {
+          await mutateCreate!(formData)
+        } else {
+          const dataForm = { formData, productId }
+          await mutateUpdate!(dataForm)
+        }
+        setLoading(false)
+      } catch (error) {
+        console.log("Error subiendo la imagen:", error)
+        return
+      }
     } else {
-      const dataForm = { formData, productId }
-      mutateUpdate!(dataForm)
+      const formData = {
+        idNumber,
+        name,
+        category,
+        subcategory,
+        ingredients,
+        price,
+        price2,
+        img
+      }
+
+      if (isCreate) {
+        await mutateCreate!(formData)
+      } else {
+        const dataForm = { formData, productId }
+        await mutateUpdate!(dataForm)
+      }
+      setLoading(false)
     }
   }
 
@@ -157,10 +229,10 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
             Sub-Categoría
           </label>
 
-          <SubCatSelect 
-            actualCategory={data!.find(cat => cat._id === category)!} 
-            subcategory={subcategory} 
-            setSubcategory={setSubcategory} 
+          <SubCatSelect
+            actualCategory={data!.find(cat => cat._id === category)!}
+            subcategory={subcategory}
+            setSubcategory={setSubcategory}
           />
         </div>
       )}
@@ -219,29 +291,53 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
         <label htmlFor="img" className={styles.label}>
           Foto del producto
         </label>
-        {img.name !== "" ?
-          <div id="img" className={styles.input}>
-            <p className={styles.input_p}>{img.name}</p>
 
-            <CloseXSVG className={styles.close_button} onClick={() => deleteImg()}/>
+        {(img !== "") ?
+          <div id="img" className={styles.image}>
+            <CloudImage public_id={img} height={160} width={160}/>
+            <CloseXSVG className={styles.close_button} onClick={() => deleteImg()} />
           </div>
-        : 
-          <input
-          id="img"
-          className={styles.input}
-          type="file"
-          placeholder="Foto del producto"
-          onChange={(e) => uploadImage(e)}
-          />
+          :
+          newImg === "" ?
+            <input
+              id="img"
+              className={styles.input}
+              type="file"
+
+              onChange={(e) => uploadImage(e)}
+            />
+            :
+            <div className={styles.image}>
+              <img src={newImg} alt="imagen temporal" className={styles.temporary_img} />
+              <CloseXSVG className={styles.close_button} onClick={() => deleteImg()} />
+            </div>
         }
       </div>
 
-      <img src={img.url}/>
+      {loading ?
+        <div className={styles.spinner}>
+          <div className={styles.cube1}></div>
+          <div className={styles.cube2}></div>
+        </div>
+        :
+        <button
+          type="submit"
+          className={styles.boton_submit}
+        >{isCreate ? "Crear Producto" : "Guardar Cambios"}</button>
+      }
 
-      <button
-        type="submit"
-        className={styles.boton_submit}
-      >{isCreate ? "Crear Producto" : "Guardar Cambios"}</button>
+      {sizeAlert &&
+        <ReactModal
+          isOpen={sizeAlert}
+          className="modal"
+          overlayClassName="overlay"
+          ariaHideApp={false}
+          onRequestClose={() => setSizeAlert(false)}
+        >
+
+          <ModalAlert message="El tamaño de la imagen no debe ser mayor a 100kb" onClick={() => setSizeAlert(false)} />
+        </ReactModal>
+      }
     </form>
   )
 }

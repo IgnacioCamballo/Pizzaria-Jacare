@@ -1,9 +1,20 @@
 import useMenu from "../hooks/useMenu"
 import { Product } from "../types/types"
+import { Cloudinary } from '@cloudinary/url-gen';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage, lazyload } from '@cloudinary/react';
+import { fill } from '@cloudinary/url-gen/actions/resize';
 
 const Producto = ({ producto, isPizza }: { producto: Product, isPizza: boolean }) => {
   const { pizza, handleChangeModal, setProductoActual, delivery, multisabor, setAlertPizza } = useMenu()
 
+  const cld = new Cloudinary({ cloud: { cloudName: 'diy7juddz' }})
+  const img = cld
+    .image(producto.img)
+    .format('auto')
+    .quality('auto')
+    .resize(fill().width(88).height(88).gravity(autoGravity()))
+  
   function deliveryActivo() {
     if (delivery === true) {
       if (producto.category !== pizza && multisabor) {
@@ -21,7 +32,9 @@ const Producto = ({ producto, isPizza }: { producto: Product, isPizza: boolean }
       onClick={() => deliveryActivo()}
       aria-label="ver info du item"
     >
-      <img className="foto_producto" src="" alt="foto" />
+      <div className="foto_producto">
+        <AdvancedImage cldImg={img} plugins={[lazyload()]}/>
+      </div>
 
       <div className="texto_producto">
         <p className="titulo_producto"><span>{producto.idNumber}.</span> {producto.name}</p>

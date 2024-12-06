@@ -542,6 +542,12 @@ body {
 
 .foto_producto {
   margin: 10px;
+  width: fit-content;
+  min-width: 5.5rem;
+  height: 5.5rem;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 .texto_producto {

@@ -10,7 +10,7 @@ export default function CreateProductView() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const {mutate} = useMutation({
+  const {mutateAsync} = useMutation({
     mutationFn: createProduct,
     onError: (error) => {
       toast.error(error.message)
@@ -34,7 +34,7 @@ export default function CreateProductView() {
         >Volver a Productos</Link>
       </nav>
 
-      <ProductsForm mutateCreate={mutate} isCreate={true}/>  
+      <ProductsForm mutateCreate={mutateAsync} isCreate={true}/>  
     </div>
   )
 }

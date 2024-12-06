@@ -17,7 +17,7 @@ export default function EditProductForm({data, productId}: EditProductFormProps)
 
   const queryClient = useQueryClient()
 
-  const {mutate} = useMutation({
+  const {mutateAsync} = useMutation({
     mutationFn: updateProduct,
     onError: (error) => {
       toast.error(error.message)
@@ -42,7 +42,7 @@ export default function EditProductForm({data, productId}: EditProductFormProps)
        >Volver a Productos</Link>
      </nav>
 
-     <ProductsForm editingData={data} mutateUpdate={mutate} isCreate={false}/>  
+     <ProductsForm editingData={data} mutateUpdate={mutateAsync} isCreate={false}/>  
    </div>
   )
 }

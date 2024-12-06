@@ -21,11 +21,7 @@ export const ProductSchema = z.object({
     ingredients: z.string().optional(),
     price: z.number(),
     price2: z.number().optional(),
-    img: z.object({
-        name: z.string(),
-        url: z.string(),
-        id: z.string()
-    })
+    img: z.string()
 })
 
 export type Product = z.infer<typeof ProductSchema>

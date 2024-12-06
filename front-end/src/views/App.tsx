@@ -9,7 +9,7 @@ import ModalProducto from "../components/ModalProducto"
 import Carrito from "../components/Carrito"
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
-import ModalAlertPizza from "../components/ModalAlertPizza"
+import ModalAlert from "../components/ModalAlert"
 
 function App() {
   const {modal, handleCerrarModal, carrito, setCarrito, alertPizza, setAlertPizza} = useMenu()
@@ -56,7 +56,7 @@ function App() {
           ariaHideApp={false}
           onRequestClose={() => setAlertPizza(false)}
         >
-          <ModalAlertPizza />
+          <ModalAlert message="Primeiro você deve adicionar os sabores restantes à pizza" onClick={() => setAlertPizza(false)}/>
         </ReactModal>
       )}
       <ToastContainer autoClose={2500} pauseOnHover={false}/>

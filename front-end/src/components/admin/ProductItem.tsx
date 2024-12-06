@@ -1,8 +1,12 @@
 import React from 'react'
-import { Product } from '../../types/types'
+import { Link, useNavigate } from 'react-router-dom'
+import { Cloudinary } from '@cloudinary/url-gen';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage, lazyload } from '@cloudinary/react';
+import { fill } from '@cloudinary/url-gen/actions/resize';
 
 import styles from "@/styles/views/AdminView.module.css"
-import { Link, useNavigate } from 'react-router-dom'
+import { Product } from '../../types/types'
 
 type ProductItemProps = {
   product: Product,
@@ -13,10 +17,20 @@ type ProductItemProps = {
 export default function ProductItem({ product, setDeletingItem, setAlertModal }: ProductItemProps) {
   const navigate = useNavigate()
 
+  const cld = new Cloudinary({ cloud: { cloudName: 'diy7juddz' }})
+
+  const img = cld
+    .image(product.img)
+    .format('auto')
+    .quality('auto')
+    .resize(fill().width(96).height(96).gravity(autoGravity()))
+
   return (
     <li key={product._id} className={styles.producto_lista}>
       <div className={styles.leftCont}>
-        <img src={product.img} className={styles.foto} />
+        <div className={styles.foto}>
+          <AdvancedImage cldImg={img} plugins={[lazyload()]}/>
+        </div>
 
         <div className={styles.contenedor_info}>
           <Link to={`/admin/products/${product._id}/edit`}

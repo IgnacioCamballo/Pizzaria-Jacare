@@ -5,6 +5,8 @@ import AdminView from "./views/AdminView";
 import CreateProductView from "./views/adminProducts/CreateProductView";
 import EditProductView from "./views/adminProducts/EditProductView";
 import CategoriesView from "./views/adminProducts/CategoriesView";
+import LoginLayout from "./layouts/LoginLayout";
+import LoginView from "./views/LoginView";
 
 export default function Router() {
 
@@ -19,6 +21,10 @@ export default function Router() {
           <Route path="/admin/products/create" element={<CreateProductView/>}/>
           <Route path="/admin/products/:productId/edit" element={<EditProductView/>}/>
           <Route path="/admin/categories" element={<CategoriesView/>}/>
+        </Route>
+
+        <Route element={<LoginLayout/>}>
+          <Route path="/login" element={<LoginView/>} index/>
         </Route>
       </Routes>
     </BrowserRouter>

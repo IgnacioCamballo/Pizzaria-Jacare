@@ -1,11 +1,23 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/20/solid'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from "@/styles/components/NavMenu.module.css"
+import { AuthUser } from '../../types/usersTypes'
+import { useQueryClient } from '@tanstack/react-query'
 
+type NavMenuProps = {
+  user: AuthUser
+}
 
+export default function NavMenu({user}: NavMenuProps) {
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
-export default function NavMenu() {
+  const logOut = () => {
+    sessionStorage.removeItem("AUTH_TOKEN")
+    queryClient.removeQueries({queryKey: ["user"]})
+    navigate("/login")
+  }
 
   return (
     <Menu>
@@ -16,7 +28,7 @@ export default function NavMenu() {
 
         <MenuItems className={styles.popover_panel}>
           <div className={styles.contenedor_popover}>
-            <p className={styles.texto_usuario}>Hola: Usuario</p>
+            <p className={styles.texto_usuario}>Hola: {user.name}</p>
             <MenuItem>
               <Link
                 to='/admin/categories'
@@ -35,7 +47,7 @@ export default function NavMenu() {
               <button
                 className={styles.texto_boton_menu}
                 type='button'
-                onClick={() => { }}
+                onClick={() => logOut()}
               >
                 Cerrar Sesión
               </button>

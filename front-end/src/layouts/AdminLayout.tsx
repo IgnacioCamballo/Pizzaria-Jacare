@@ -1,17 +1,26 @@
-import { Outlet } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
-import styles from "../styles/layouts/AdminLayout.module.css"
+
+import { useAuth } from "../hooks/useAuth"
 import NavMenu from "../components/admin/NavMenu"
+import styles from "../styles/layouts/AdminLayout.module.css"
 
 export default function AdminLayout() {
-  return (
+  const {data, isError, isLoading} = useAuth()
+
+  if(isLoading) return "Cargando..."
+  if(isError) {
+    return <Navigate to={"/login"}/>
+  }
+
+  if(data) return (
     <>
       <header className={styles.header}>
         <div className={styles.header_container}>
           <img src="/assets/logo.svg" alt="logo" className={styles.logo} />
 
-          <NavMenu />
+          <NavMenu user={data}/>
         </div>
       </header>
 

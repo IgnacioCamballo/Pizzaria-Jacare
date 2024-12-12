@@ -44,7 +44,8 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
   const {pizza} = useMenu()
 
   useEffect(() => {
-    setSubCategoryList(category.subCategories.sort((cat1, cat2) => cat1.orderNsub - cat2.orderNsub))
+    const list = category.subCategories.sort((cat1, cat2) => cat1.orderNsub - cat2.orderNsub)
+    setSubCategoryList(list)
   }, [category])
 
   //querys for categories
@@ -126,7 +127,7 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
 
       const formData: SubCategoryData = {
         nameSub: subCatEditing.nameSub,
-        orderNsub: subCategoryList.find(cat => cat._id === subCatEditing._id)?.orderNsub!,
+        orderNsub: subCategoryList.find(cat => cat._id === subCatEditing._id)!.orderNsub!,
         priceSmall: subCatEditing.priceSmall,
         priceBig: subCatEditing.priceBig
       }

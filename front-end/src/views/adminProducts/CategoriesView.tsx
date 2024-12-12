@@ -106,7 +106,7 @@ export default function CategoriesView() {
 
       const formData: CategoryData = {
         name: catEditing,
-        orderN: categoryList.find(cat => cat._id === catEditingId)?.orderN!
+        orderN: categoryList.find(cat => cat._id === catEditingId)!.orderN!
       }
       const data = { formData: formData, categoryId: catEditingId }
 

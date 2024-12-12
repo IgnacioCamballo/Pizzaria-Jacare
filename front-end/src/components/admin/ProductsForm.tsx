@@ -64,6 +64,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
     }
   })
 
+  //Configures image from cludinary to show in case the edit product has an existing img
   const cld = new Cloudinary({ cloud: { cloudName: 'diy7juddz' }})
   const image = cld
     .image(img)
@@ -90,7 +91,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
     }
   }, [category, subcategory])
 
-  //manage the image upload to cloudinary
+  //manage the image upload to state as preview from form. when form us submitted, the handleSubmitForm will upload to cloudinary
   const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0]
     if (file.size > 100 * 1024) {

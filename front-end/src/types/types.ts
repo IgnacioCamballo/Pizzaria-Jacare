@@ -1,16 +1,18 @@
 import {z} from "zod"
 
-export type item = {
-    id: string
-    categoria: string
-    cantidad: number
-    tamaño: string
-    sabores: number
-    sabor1: string
-    sabor2: string
-    sabor3: string
-    precio: number
-}
+export const ItemSchema = z.object({
+    _id: z.string(),
+    categoria: z.string(),
+    cantidad: z.number(),
+    tamaño: z.string(),
+    sabores: z.number(),
+    sabor1: z.string(),
+    sabor2: z.string(),
+    sabor3: z.string(),
+    precio: z.number()
+})
+
+export type item = z.infer<typeof ItemSchema>
 
 export const ProductSchema = z.object({
     _id: z.string(),

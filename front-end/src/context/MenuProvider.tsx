@@ -2,6 +2,7 @@ import { useState, createContext, useEffect } from "react"
 import { toast } from "react-toastify"
 
 import { item, MenuContextProps, Product } from "../types/types"
+import { User } from "../types/usersTypes"
 
 interface props {
   children: JSX.Element | JSX.Element[]
@@ -49,7 +50,7 @@ const MenuProvider = ({ children }: props) => {
 
   const obtenerPedido = () => {
     const pedidoAlmacenado = localStorage.getItem("pedido")
-    const pedidoObtenido = pedidoAlmacenado ? JSON.parse(pedidoAlmacenado) : []
+    const pedidoObtenido: item[] = pedidoAlmacenado ? JSON.parse(pedidoAlmacenado) : []
     setPedido(pedidoObtenido)
     if (pedidoObtenido.length >= 1) {
       setDelivery(true)
@@ -72,9 +73,9 @@ const MenuProvider = ({ children }: props) => {
   const handleAgregarItem = (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
-    let pedidoNuevo: item[] = pedido
+    const pedidoNuevo: item[] = pedido
     const item: item = {
-      id: productoActual._id,
+      _id: productoActual._id,
       categoria: productoActual.category,
       cantidad: 1,
       tamaño: tamaño,
@@ -88,8 +89,8 @@ const MenuProvider = ({ children }: props) => {
     if (multisabor === false) {
       if (sabores === 1) {
         //ver repetido
-        if (pedidoNuevo.some(item => item.id === productoActual._id && item.sabores === 1)) {
-          const index = pedidoNuevo.findIndex(item => item.id === productoActual._id && item.sabores === 1)
+        if (pedidoNuevo.some(item => item._id === productoActual._id && item.sabores === 1)) {
+          const index = pedidoNuevo.findIndex(item => item._id === productoActual._id && item.sabores === 1)
           const itemRepetido = pedidoNuevo[index]
           const itemSumado = {
             ...itemRepetido,
@@ -117,7 +118,7 @@ const MenuProvider = ({ children }: props) => {
           ...pizzaIncompleta,
           sabor2: productoActual.name,
           precio: (pizzaIncompleta.precio > precio ? pizzaIncompleta.precio : precio),
-          id: pizzaIncompleta.id + productoActual._id
+          id: pizzaIncompleta._id + productoActual._id
         }
         pedidoNuevo.push(pizzaCompleta)
         localStorage.setItem('pedido', JSON.stringify(pedidoNuevo))
@@ -131,7 +132,7 @@ const MenuProvider = ({ children }: props) => {
             ...pizzaIncompleta,
             sabor2: productoActual.name,
             precio: (pizzaIncompleta.precio > precio ? pizzaIncompleta.precio : precio),
-            id: pizzaIncompleta.id + productoActual._id
+            id: pizzaIncompleta._id + productoActual._id
           }
           setPizzaIncompleta(pizza2de3)
           handleCerrarModal()
@@ -141,7 +142,7 @@ const MenuProvider = ({ children }: props) => {
             ...pizzaIncompleta,
             sabor3: productoActual.name,
             precio: (pizzaIncompleta.precio > precio ? pizzaIncompleta.precio : precio),
-            id: pizzaIncompleta.id + productoActual._id
+            id: pizzaIncompleta._id + productoActual._id
           }
           pedidoNuevo.push(pizza3sabores)
           localStorage.setItem('pedido', JSON.stringify(pedidoNuevo))
@@ -158,8 +159,8 @@ const MenuProvider = ({ children }: props) => {
     if (item.cantidad === 1) {
       return
     } else {
-      let pedidoNuevo = pedido
-      const index = pedidoNuevo.findIndex(objeto => objeto.id === item.id)
+      const pedidoNuevo = pedido
+      const index = pedidoNuevo.findIndex(objeto => objeto._id === item._id)
       item.cantidad = item.cantidad - 1
       pedidoNuevo.splice(index, 1, item)
       localStorage.setItem('pedido', JSON.stringify(pedidoNuevo))
@@ -168,8 +169,8 @@ const MenuProvider = ({ children }: props) => {
   }
 
   const handleSumarCantidad = (item: item) => {
-    let pedidoNuevo = pedido
-    const index = pedidoNuevo.findIndex(objeto => objeto.id === item.id)
+    const pedidoNuevo = pedido
+    const index = pedidoNuevo.findIndex(objeto => objeto._id === item._id)
     item.cantidad = item.cantidad + 1
     pedidoNuevo.splice(index, 1, item)
     localStorage.setItem('pedido', JSON.stringify(pedidoNuevo))
@@ -177,7 +178,7 @@ const MenuProvider = ({ children }: props) => {
   }
 
   const handleEliminarItem = (id: string) => {
-    const pedidoItemEliminado = pedido.filter(item => item.id !== id)
+    const pedidoItemEliminado = pedido.filter(item => item._id !== id)
     localStorage.setItem('pedido', JSON.stringify(pedidoItemEliminado))
     setGuardando(true)
     toast.error("item removido com sucesso")

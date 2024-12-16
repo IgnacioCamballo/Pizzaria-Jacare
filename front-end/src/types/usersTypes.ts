@@ -16,4 +16,6 @@ export const userAuthSchema = userSchema.pick({
   _id: z.string()
 })
 
+export const usersAuthSchema = z.array(userAuthSchema)
+
 export type AuthUser = z.infer<typeof userAuthSchema>

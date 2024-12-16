@@ -1,7 +1,75 @@
-import React from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
+
+import styles from "@/styles/views/UsersView.module.css"
+import { getAllUsers } from '../../api/UserAPI'
+import { AuthUser } from '../../types/usersTypes'
+
+import UserItem from '../../components/admin/UserItem'
+import AlertModal from '../../components/admin/AlertModal'
+
+const emptyUser = {
+  name: "",
+  rank: 0,
+  _id: ""
+}
 
 export default function UsersView() {
-  return (
-    <div>UsersView</div>
-  )
+  const params = useParams()
+  const userID = params.currentUser
+  const firstUser = import.meta.env.VITE_API_FIRST_USER
+
+  const [alertModal, setAlertModal] = useState(false)
+  const [editingUser, setEditingUser] = useState<AuthUser>(emptyUser)
+
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+
+
+  //Gets the users
+  const { data } = useQuery({
+    queryKey: ["Users"],
+    queryFn: getAllUsers
+  })
+
+  const handleDeleteUser = () => {
+
+  }
+
+  if (data) {
+    return (
+      <div className={styles.container}>
+        <h1 className={styles.titulo}>Usuarios</h1>
+        <p className={styles.subtitulo}>Maneja y administra los usuarios</p>
+
+        <nav>
+          <Link
+            className={styles.link_boton}
+            to={`/users/${userID}/createUser`}
+          >Nuevo Usuario</Link>
+        </nav>
+
+        <ul className={styles.list_container}>
+          {data.map(user => 
+            <UserItem 
+              key={user._id} 
+              user={user} 
+              editUser={() => {navigate(`/users/${userID}/editUser/${user._id}`)}}
+              deleteUser={() => {setAlertModal(true), setEditingUser(user)}}  
+            />
+          )}
+        </ul>
+        {alertModal && (
+          <AlertModal
+            message={editingUser._id === firstUser ? `No se puede eliminar a ${editingUser.name}` : `Seguro que deseas eliminar a ${editingUser.name}`}
+            onCancel={() => {setAlertModal(false), setEditingUser(emptyUser)}}
+            onConfirm={() => {editingUser._id === firstUser ? {} : handleDeleteUser}}
+          />
+        )}
+      </div>
+    )
+  }
 }
+

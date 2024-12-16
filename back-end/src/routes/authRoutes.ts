@@ -20,6 +20,10 @@ router.post("/login",
   AuthController.login
 )
 
+router.get("/",
+  AuthController.getAllUsers
+)
+
 router.get("/user",
   authentication,
   AuthController.user

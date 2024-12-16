@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "../lib/axios";
-import { User, userAuthSchema, UserFormData } from "../types/usersTypes";
+import { User, userAuthSchema, UserFormData, usersAuthSchema } from "../types/usersTypes";
 
 export async function createUser(formData: User) {
   try {
@@ -13,6 +13,7 @@ export async function createUser(formData: User) {
   }
 }
 
+//Autenticates user when loging in
 export async function authenticateUser(formData: UserFormData) {
   try {
     const {data} = await api.post("/auth/login", formData)
@@ -26,6 +27,7 @@ export async function authenticateUser(formData: UserFormData) {
   }
 }
 
+//Checks if user is authorised when entering to an admin page
 export async function getUser() {
   const token = sessionStorage.getItem("AUTH_TOKEN")
 
@@ -44,6 +46,20 @@ export async function getUser() {
     if(isAxiosError(error) && error.response) {
       throw new Error(error.response.data.error)
     }
+  }  
+}
+
+export async function getAllUsers() {
+  try {
+    const {data} = await api("/auth")
+
+    const response = usersAuthSchema.safeParse(data)
+    if(response.success) {
+      return response.data
+    }
+  } catch (error) {
+    if(isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error)
+    }
   }
-  
 }

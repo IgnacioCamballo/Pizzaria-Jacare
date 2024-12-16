@@ -27,6 +27,7 @@ export class AuthController {
     }
   }
   
+  //User for loging in and creating token to stay loged
   static login = async (req: Request, res: Response) => {
     try {
       const {name, password} = req.body
@@ -54,7 +55,17 @@ export class AuthController {
     }
   }
 
+  //Used to verify if user is alowed to be in the page
   static user = async (req: Request, res: Response) => {
     res.json(req.user)
+  }
+
+  static getAllUsers = async (req: Request, res: Response) => {
+    try {
+      const users = await User.find({}).select("_id name rank")
+      res.json(users)
+    } catch (error) {
+      console.log(error)
+    }
   }
 }

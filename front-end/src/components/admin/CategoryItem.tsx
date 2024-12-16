@@ -41,8 +41,6 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
 
   const queryClient = useQueryClient()
 
-  const {pizza} = useMenu()
-
   useEffect(() => {
     const list = category.subCategories.sort((cat1, cat2) => cat1.orderNsub - cat2.orderNsub)
     setSubCategoryList(list)
@@ -90,15 +88,7 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
   })
 
   function handleEditingSubCat(e: React.ChangeEvent<HTMLInputElement>) {
-    if(e.target.id === "subCatName") {
-      setSubCatEditing({...subCatEditing, nameSub: e.target.value})
-    }
-    if(e.target.id === "priceBig") {
-      setSubCatEditing({...subCatEditing, priceBig: parseInt(e.target.value)})
-    }
-    if(e.target.id === "priceSmall") {
-      setSubCatEditing({...subCatEditing, priceSmall: parseInt(e.target.value)})
-    }
+    setSubCatEditing({...subCatEditing, nameSub: e.target.value})
   }
 
   const handleSubmitSubCat = (e: { preventDefault: () => void; }) => {
@@ -110,9 +100,7 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
 
       const formData: SubCategoryData = {
         nameSub: subCatEditing.nameSub,
-        orderNsub: subCategoryList.length,
-        priceSmall: subCatEditing.priceSmall,
-        priceBig: subCatEditing.priceBig
+        orderNsub: subCategoryList.length
       }
       const data = {
         formData: formData,
@@ -127,9 +115,7 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
 
       const formData: SubCategoryData = {
         nameSub: subCatEditing.nameSub,
-        orderNsub: subCategoryList.find(cat => cat._id === subCatEditing._id)!.orderNsub!,
-        priceSmall: subCatEditing.priceSmall,
-        priceBig: subCatEditing.priceBig
+        orderNsub: subCategoryList.find(cat => cat._id === subCatEditing._id)!.orderNsub!
       }
       const data = { formData, catId: category._id, subId: subCatEditing._id }
 
@@ -225,14 +211,10 @@ export default function CategoryItem({ category, editCategory, deleteCategory }:
             <li key={subCat._id} className={styles.subCategory_container}>
                 <h2 className={styles.category_name}>{subCat.nameSub}</h2>
 
-                <div className={styles.price_menu}>
-                  {category._id === pizza && <p className={styles.prices_subCat}><span className={styles.prices_subCat_span}>G:</span> R${subCat.priceBig} <span className={styles.prices_subCat_span}>M:</span> R${subCat.priceSmall}</p>}  
-                
-                  <SubCategoryMenu
-                    onClic1={() => { setSubCatModal(true), setSubCatEditing(subCat)}}
-                    onClic2={() => { setAlertModal(true), setSubCatEditing(subCat)}}
-                  />
-                </div>
+                <SubCategoryMenu
+                  onClic1={() => { setSubCatModal(true), setSubCatEditing(subCat)}}
+                  onClic2={() => { setAlertModal(true), setSubCatEditing(subCat)}}
+                />
             </li>
           )}
         </ReactSortable>

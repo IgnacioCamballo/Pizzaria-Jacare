@@ -59,7 +59,7 @@ function App() {
           <ModalAlert message="Primeiro você deve adicionar os sabores restantes à pizza" onClick={() => setAlertPizza(false)}/>
         </ReactModal>
       )}
-      <ToastContainer autoClose={2500} pauseOnHover={false}/>
+      <ToastContainer autoClose={1000} pauseOnHover={false}/>
     </>
   )
 }

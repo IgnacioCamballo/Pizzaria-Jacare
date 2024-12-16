@@ -36,7 +36,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
   const [subcategory, setSubcategory] = useState<ProductForm["subcategory"]>(isCreate ? "" : editingData?.subcategory)
   const [ingredients, setIngredients] = useState<ProductForm["ingredients"]>(isCreate ? "" : editingData?.ingredients)
   const [price, setPrice] = useState<ProductForm["price"]>(isCreate ? 0 : editingData!.price)
-  const [price2, setPrice2] = useState<ProductForm["price2"]>(isCreate ? 0 : editingData?.price2)
+  const [price2] = useState<ProductForm["price2"]>(0)
   const [img, setImg] = useState<ProductForm["img"]>(isCreate ? "" : editingData!.img)
   const [error, setError] = useState(false)
   const [newImg, setNewImg] = useState("")
@@ -72,23 +72,12 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
     .quality('auto')
     .resize(fill().width(160).height(160).gravity(autoGravity()))
 
-  //Checks if actual category name is pizza and change to double price and price names
-  const ispizza = category === pizza
-
   //Gets the corresponding sub categories for the selected categories and renders the sub categories section
   const actualCategorySubs = data?.find(dataCategory => dataCategory._id === category)?.subCategories
   const isSubCat = category === "" ? false : actualCategorySubs?.length ? true : false
 
   useEffect(() => {
-    if (!isSubCat) { setSubcategory(null) }
-    if (!ispizza) {
-      setPrice2(0)
-      setIngredients("")
-    } else {
-      if (subcategory)
-        setPrice(data?.find(cat => cat._id === category)?.subCategories.find(subcat => subcat._id === subcategory)?.priceBig!)
-      setPrice2(data?.find(cat => cat._id === category)?.subCategories.find(subcat => subcat._id === subcategory)?.priceSmall!)
-    }
+    if (!isSubCat) { setSubcategory("") }
   }, [category, subcategory])
 
   //manage the image upload to state as preview from form. when form us submitted, the handleSubmitForm will upload to cloudinary
@@ -122,7 +111,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
     }
 
     //if old img is different of newImg deletes from cloudinary old img
-    if (editingData?.img !== img) {
+    if (!isCreate && editingData?.img !== img) {
       const {mutate} = deleteImageCloudinary
       mutate(editingData!.img)
     }
@@ -135,7 +124,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
           idNumber,
           name,
           category,
-          subcategory,
+          subcategory: subcategory === "" ? null : subcategory,
           ingredients,
           price,
           price2,
@@ -158,7 +147,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
         idNumber,
         name,
         category,
-        subcategory,
+        subcategory: subcategory === "" ? null : subcategory,
         ingredients,
         price,
         price2,
@@ -203,6 +192,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
         <label htmlFor="idNumber" className={styles.label}>
           Código del Producto
         </label>
+        <div className={styles.message_small_letter}>Usar para ordenar productos, si no se usa se mostraran por orden de creación</div>
         <input
           id="idNumber"
           className={styles.input}
@@ -248,7 +238,6 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
         </div>
       )}
 
-      {ispizza && (
         <div className={styles.contenedor_label_input}>
           <label htmlFor="ingredients" className={styles.label}>
             Ingredientes
@@ -262,18 +251,16 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
             onChange={(e) => setIngredients(e.target.value)}
           />
         </div>
-      )}
 
       <div className={styles.contenedor_label_input}>
         <label htmlFor="price" className={styles.label}>
-          {ispizza ? "Precio pizza grande" : "Precio *"}
+          Precio *
         </label>
         <input
-          disabled={ispizza && subcategory !== "" && subcategory !== null}
           id="price"
           className={styles.input}
           type="number"
-          placeholder={ispizza ? "Precio pizza grande" : "Precio"}
+          placeholder="Precio"
           value={price}
           onChange={(e) => setPrice(parseInt(e.target.value))}
         />
@@ -282,21 +269,6 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
           <ErrorMessage>El precio es obligatorio</ErrorMessage>
         )}
       </div>
-
-      {ispizza && <div className={styles.contenedor_label_input}>
-        <label htmlFor="price2" className={styles.label}>
-          Precio pizza pequeña
-        </label>
-        <input
-          disabled={subcategory !== "" && subcategory !== null}
-          id="price2"
-          className={styles.input}
-          type="number"
-          placeholder="Precio pizza pequeña"
-          value={price2}
-          onChange={(e) => setPrice2(parseInt(e.target.value))}
-        />
-      </div>}
 
       <div className={styles.contenedor_label_input}>
         <label htmlFor="img" className={styles.label}>

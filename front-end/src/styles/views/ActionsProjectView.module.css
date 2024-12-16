@@ -87,6 +87,11 @@
   text-transform: uppercase;
 }
 
+.message_small_letter {
+  font-size: small;
+  margin-block: -0.4rem;
+}
+
 .input {
   font-size: medium;
   padding: 0.5rem;

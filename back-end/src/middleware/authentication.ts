@@ -23,7 +23,6 @@ export const authentication = async (req: Request, res: Response, next: NextFunc
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    console.log(decoded)
     
     if(typeof decoded === "object" && decoded.id) {
       const user = await User.findById(decoded.id).select("_id name rank")

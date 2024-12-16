@@ -17,7 +17,6 @@ type AlertModalProps = {
 
 export default function SubCategoryModal({ onCancel, onSubmit, onEdit, subCatEditing, category }: AlertModalProps) {
   const [message, setmessage] = useState("")
-  const {pizza} = useMenu()
 
   useEffect(() => {
     setmessage(subCatEditing.nameSub)
@@ -37,44 +36,6 @@ export default function SubCategoryModal({ onCancel, onSubmit, onEdit, subCatEdi
           onChange={onEdit}
           placeholder="Nombre de Sub Categoría"
         />
-
-        {category._id === pizza &&
-          <div>
-            <div className={styles.modal_input}>
-              <label htmlFor="priceSmall">Precio Media:</label>
-
-              <div className={styles.price_size}>
-                <p className={styles.R}>R$</p>
-
-                <input
-                  className={styles.input_number}
-                  id="priceSmall"
-                  name="precio pizza chica"
-                  type="number"
-                  defaultValue={subCatEditing.priceSmall}
-                  onChange={onEdit}
-                />
-              </div>
-            </div>
-
-            <div className={styles.modal_input}>
-              <label htmlFor="priceBig">Precio Grande:</label>
-
-              <div className={styles.price_size}>
-                <p className={styles.R}>R$</p>
-
-                <input
-                  className={styles.input_number}
-                  id="priceBig"
-                  name="precio pizza grande"
-                  type="number"
-                  defaultValue={subCatEditing.priceBig}
-                  onChange={onEdit}
-                />
-              </div>
-            </div>
-          </div>
-        }
 
         <div className={styles.modal_buttons}>
           <button className={styles.modal_button} onClick={onCancel}>

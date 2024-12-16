@@ -78,7 +78,7 @@ const Menu = () => {
 
           <div className="contenedor_productos_mostrados">
             {category.products.filter(product => !product.subcategory).sort((a, b) => a.idNumber - b.idNumber).map(product => (
-              <Producto key={product._id} producto={product} isPizza={product.category === pizza}/>
+              <Producto key={product._id} producto={product}/>
             ))}
           </div>
 

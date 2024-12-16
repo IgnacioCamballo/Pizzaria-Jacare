@@ -145,11 +145,6 @@
   border-radius: 0.25rem;
 }
 
-.price_menu {
-  display: flex;
-  align-items: center;
-}
-
 .prices_subCat_span {
   font-weight: 700;
   color: black;

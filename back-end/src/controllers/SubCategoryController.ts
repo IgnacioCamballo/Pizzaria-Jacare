@@ -56,10 +56,6 @@ export class SubCategoryController {
         return
       }
 
-      // req.subCat.nameSub = req.body.nameSub
-      // req.subCat.orderNSub = req.body.orderNSub
-      // await req.subCat.save()
-
       res.send("Sub-Categoría actualizada correctamente")
     } catch (error) {
       res.status(500).json({error: "Hubo un error"})

@@ -5,7 +5,7 @@ import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
 import { AdvancedImage, lazyload } from '@cloudinary/react';
 import { fill } from '@cloudinary/url-gen/actions/resize';
 
-const Producto = ({ producto, isPizza }: { producto: Product, isPizza: boolean }) => {
+const Producto = ({ producto }: { producto: Product}) => {
   const { pizza, handleChangeModal, setProductoActual, delivery, multisabor, setAlertPizza } = useMenu()
 
   const cld = new Cloudinary({ cloud: { cloudName: 'diy7juddz' }})
@@ -37,22 +37,14 @@ const Producto = ({ producto, isPizza }: { producto: Product, isPizza: boolean }
       </div>
 
       <div className="texto_producto">
-        <p className="titulo_producto"><span>{producto.idNumber}.</span> {producto.name}</p>
+        <p className="titulo_producto">{producto.name}</p>
 
-        {isPizza ? 
-          <>
-            <div className="contenedor_ingredientes">
-              <p className="ingredientes"> Ingredientes: {producto.ingredients}</p>
-            </div>
-            {!producto.subcategory && (
-              <div className="precio_doble">
-                <p className="precio"><span className="span_precio">Grande:</span> R${producto.price}</p>
-                <p className="precio"><span className="span_precio">Media:</span> R${producto.price2}</p>
-              </div>
-            )}
-          </>
-          : <p className="precio">R${producto.price}</p>
+        {producto.ingredients && 
+          <div className="contenedor_ingredientes">
+            <p className="ingredientes"> Ingredientes: {producto.ingredients}</p>
+          </div>
         }
+        <p className="precio">R${producto.price}</p>
       </div>
     </div>
   )

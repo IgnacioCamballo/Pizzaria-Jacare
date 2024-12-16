@@ -68,4 +68,29 @@ export class AuthController {
       console.log(error)
     }
   }
+
+  static deleteUser = async (req: Request, res: Response) => {
+    const {deleteUser} = req.params
+    const user = req.user
+
+    if(user.rank !== 1) {
+      res.send("Acción no permitida")
+      return
+    }
+
+    try {
+      const userToDelete = await User.findById(deleteUser)
+
+      if(!userToDelete) {
+        const error = new Error('Usuario inexistente')
+        res.status(404).json({error: error.message})
+        return
+      }
+
+      await userToDelete.deleteOne()
+      res.send("Usuario eliminada")
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }

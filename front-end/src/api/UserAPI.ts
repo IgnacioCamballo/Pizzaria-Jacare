@@ -63,3 +63,20 @@ export async function getAllUsers() {
     }
   }
 }
+
+export async function DeleteUser(user: string) {
+  const token = sessionStorage.getItem("AUTH_TOKEN")
+
+  try {
+    const {data} = await api.delete(`/auth/${user}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return data
+  } catch (error) {
+    if(isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error)
+    }
+  }
+}

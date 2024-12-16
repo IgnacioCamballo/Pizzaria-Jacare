@@ -9,7 +9,6 @@ import { fill } from '@cloudinary/url-gen/actions/resize';
 import styles from "@/styles/views/ActionsProjectView.module.css"
 import ErrorMessage from "./ErrorMessage";
 import { getCategories } from "../../api/CategoryAPI";
-import useMenu from "../../hooks/useMenu";
 import { deleteImage, updateImage } from "../../api/CloudinaryAPI";
 import { Product, ProductForm } from "../../types/types";
 
@@ -18,6 +17,7 @@ import SubCatSelect from "./SubCatSelect";
 import CloseXSVG from "../svg/CloseXSVG";
 import ModalAlert from "../ModalAlert";
 import ReactModal from "react-modal";
+import LoaderSmall from "./LoaderSmall";
 
 type ProjectFormProps = {
   mutateCreate?: UseMutateAsyncFunction<any, Error, ProductForm, unknown>,
@@ -27,7 +27,6 @@ type ProjectFormProps = {
 }
 
 export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, isCreate }: ProjectFormProps) {
-  const { pizza } = useMenu()
 
   const [productId] = useState<Product["_id"]>(isCreate ? "" : editingData!._id)
   const [idNumber, setIdNumber] = useState<ProductForm["idNumber"]>(isCreate ? 0 : editingData!.idNumber)
@@ -300,10 +299,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
       </div>
 
       {loading ?
-        <div className={styles.spinner}>
-          <div className={styles.cube1}></div>
-          <div className={styles.cube2}></div>
-        </div>
+        <LoaderSmall />
         :
         <button
           type="submit"

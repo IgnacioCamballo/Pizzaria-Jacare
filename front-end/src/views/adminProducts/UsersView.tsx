@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import styles from "@/styles/views/UsersView.module.css"
-import { getAllUsers } from '../../api/UserAPI'
+import { DeleteUser, getAllUsers } from '../../api/UserAPI'
 import { AuthUser } from '../../types/usersTypes'
 
 import UserItem from '../../components/admin/UserItem'
@@ -34,8 +34,24 @@ export default function UsersView() {
     queryFn: getAllUsers
   })
 
-  const handleDeleteUser = () => {
+  //Delete user query
+  const deleteUser = useMutation({
+    mutationFn: DeleteUser,
+    onError: (error) => {
+      toast.error(error.message)
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["Users"] })
+      toast.success(data)
+    }
+  })
 
+  const handleDeleteUser = () => {
+    const {mutate} = deleteUser
+    
+    mutate(editingUser._id)
+    setAlertModal(false)
+    setEditingUser(emptyUser)
   }
 
   if (data) {
@@ -63,9 +79,9 @@ export default function UsersView() {
         </ul>
         {alertModal && (
           <AlertModal
-            message={editingUser._id === firstUser ? `No se puede eliminar a ${editingUser.name}` : `Seguro que deseas eliminar a ${editingUser.name}`}
+            message={editingUser._id === userID ? "No puedes eliminar tu propia cuenta" : editingUser._id === firstUser ? `No se puede eliminar a ${editingUser.name}` : `Seguro que deseas eliminar a ${editingUser.name}`}
             onCancel={() => {setAlertModal(false), setEditingUser(emptyUser)}}
-            onConfirm={() => {editingUser._id === firstUser ? {} : handleDeleteUser}}
+            onConfirm={() => {editingUser._id === firstUser || editingUser._id === userID ? {} : handleDeleteUser()}}
           />
         )}
       </div>

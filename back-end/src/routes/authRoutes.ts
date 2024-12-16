@@ -29,4 +29,9 @@ router.get("/user",
   AuthController.user
 )
 
+router.delete("/:deleteUser",
+  authentication,
+  AuthController.deleteUser
+)
+
 export default router

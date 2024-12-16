@@ -2,7 +2,6 @@ import { useState, createContext, useEffect } from "react"
 import { toast } from "react-toastify"
 
 import { item, MenuContextProps, Product } from "../types/types"
-import { User } from "../types/usersTypes"
 
 interface props {
   children: JSX.Element | JSX.Element[]
@@ -11,7 +10,7 @@ interface props {
 const MenuContext = createContext<MenuContextProps>({} as MenuContextProps)
 
 const MenuProvider = ({ children }: props) => {
-  const pizza = "674f750add362637b281687d"
+  const pizza = import.meta.env.VITE_API_PIZZA
 
   const [menu, setMenu] = useState("Tudo")
   const [desplegable, setDesplegable] = useState(false)

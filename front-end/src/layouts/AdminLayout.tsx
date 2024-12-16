@@ -9,7 +9,17 @@ import styles from "../styles/layouts/AdminLayout.module.css"
 export default function AdminLayout() {
   const {data, isError, isLoading} = useAuth()
 
-  if(isLoading) return "Cargando..."
+  if(isLoading) return (
+    <div className={styles.spinner_container}>
+      <div className={styles.blue_top}/>
+      <div className={styles.spinner}>
+        <div className={styles.cube1}></div>
+        <div className={styles.cube2}></div>
+      </div>
+      <h4> Cargando</h4>
+    </div>
+  )
+
   if(isError) {
     return <Navigate to={"/login"}/>
   }

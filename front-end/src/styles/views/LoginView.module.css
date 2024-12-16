@@ -7,6 +7,7 @@
 }
 
 .contenedor_label_input {
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
@@ -31,6 +32,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.pass_eye {
+  position: absolute;
+  right: 1rem;
+  top: 2rem;
+  cursor: pointer;
 }
 
 .boton_submit {

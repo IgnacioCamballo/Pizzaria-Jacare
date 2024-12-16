@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { AuthController } from "../controllers/AuthController";
 import { handleInputErrors } from "../middleware/validation";
 import { authentication } from "../middleware/authentication";
@@ -13,6 +13,17 @@ router.post("/",
   AuthController.createUser
 )
 
+router.get("/",
+  AuthController.getAllUsers
+)
+
+router.get("/:id", 
+  param("id").isMongoId().withMessage("ID no valido"),
+
+  handleInputErrors,
+  AuthController.getUserById
+)
+
 router.post("/login",
   body("name").notEmpty().withMessage("EL nombre es obligatorio"),
   body("password").notEmpty().withMessage("La contraseña es obligatoria"),
@@ -23,6 +34,11 @@ router.post("/login",
 router.get("/user",
   authentication,
   AuthController.user
+)
+
+router.delete("/:deletingUser",
+  authentication,
+  AuthController.deleteUser
 )
 
 export default router

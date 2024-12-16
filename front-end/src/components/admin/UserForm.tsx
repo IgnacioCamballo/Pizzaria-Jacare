@@ -1,48 +1,37 @@
-import { FormEvent, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { useMutation } from "@tanstack/react-query"
-import { toast } from "react-toastify"
+import { FormEvent, useState } from 'react'
 
-import { authenticateUser } from "../api/UserAPI"
 import styles from "@/styles/views/LoginView.module.css"
+import ErrorMessage from './ErrorMessage'
+import EyePass from '../svg/EyePass'
 
-import ErrorMessage from "../components/admin/ErrorMessage"
-import EyePass from "../components/svg/EyePass"
+type UserFormProps = {
+  createMutate?: string, 
+  editMutate?: string
+}
 
-export default function LoginView() {
-  const [name, setname] = useState("")
+export default function UserForm({}: UserFormProps) {
+  const [name, setName] = useState("")
   const [password, setPassword] = useState("")
+  const [rank, setRank] = useState(2)
   const [error, setError] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
-
-  const navigate = useNavigate()
-
-  const { mutate } = useMutation({
-    mutationFn: authenticateUser,
-    onError: (error) => {
-      toast.error(error.message)
-    },
-    onSuccess: () => {
-      navigate("/admin")
-    }
-  })
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (name === "" || password === "") {
+    if(name === "" || password === "") {
       setError(true)
       return
     }
     setError(false)
 
-    mutate({ name, password })
+    
   }
 
   return (
-    <form
+    <form 
       className={styles.login_container}
-      onSubmit={(e) => { handleOnSubmit(e) }}
+      onSubmit={(e) => {handleOnSubmit(e)}}
       noValidate
     >
       <div className={styles.contenedor_label_input}>
@@ -55,7 +44,7 @@ export default function LoginView() {
           type="text"
           placeholder="Usuario"
           value={name}
-          onChange={(e) => { setname(e.target.value) }}
+          onChange={(e) => {setName(e.target.value)}}
         />
 
         {error && name === "" && (
@@ -73,11 +62,30 @@ export default function LoginView() {
           type={isVisible? "text" : "password"}
           placeholder="Contraseña"
           value={password}
-          onChange={(e) => { setPassword(e.target.value) }}
+          onChange={(e) => {setPassword(e.target.value)}}
         />
         <div className={styles.pass_eye} onClick={() => setIsVisible(!isVisible)}>
-          <EyePass width={20} height={20} isVisible={isVisible} />
+          <EyePass width={20} height={20} isVisible={isVisible}/>
         </div>
+
+        {error && password === "" && (
+          <ErrorMessage>El nombre es obligatorio</ErrorMessage>
+        )}
+      </div>
+
+      <div className={styles.contenedor_label_input}>
+        <label htmlFor="rango" className={styles.label}>
+          Rango
+        </label>
+        <select
+          id="rango"
+          className={styles.input}
+          value={rank}
+          onChange={(e) => {setRank(parseInt(e.target.value))}}
+        >
+          <option value={2}>Medio. Sin acceso a usuarios</option>
+          <option value={1}>Alto. Acceso a usuarios</option>
+        </select>
 
         {error && password === "" && (
           <ErrorMessage>El nombre es obligatorio</ErrorMessage>

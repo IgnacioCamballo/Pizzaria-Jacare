@@ -29,6 +29,13 @@ export default function NavMenu({user}: NavMenuProps) {
         <MenuItems className={styles.popover_panel}>
           <div className={styles.contenedor_popover}>
             <p className={styles.texto_usuario}>Hola: {user.name}</p>
+            {user.rank === 1 && <MenuItem>
+              <Link
+                to={`/users/${user._id}`}
+                className={styles.texto_boton_menu}
+              >Usuarios
+              </Link>
+            </MenuItem>}
             <MenuItem>
               <Link
                 to='/admin/categories'

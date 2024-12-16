@@ -10,6 +10,7 @@ import { Category } from "../types/categoriesTypes"
 
 import AlertModal from "../components/admin/AlertModal"
 import ProductsBySubCat from "../components/admin/ProductsBySubCat"
+import Loader from "../components/admin/Loader"
 
 export default function AdminView() {
   const [alertModal, setAlertModal] = useState(false)
@@ -55,14 +56,16 @@ export default function AdminView() {
     return ProductName
   }
 
-  if (isLoading) return "Cargando..."
+  if(isLoading) return (
+    <Loader />
+  )
 
   if (categoryList) return (
     <div className={styles.container}>
       <h1 className={styles.titulo}>Mis Productos</h1>
       <p className={styles.subtitulo}>Maneja y administra tus productos</p>
 
-      <nav className={styles.boton_nuevo}>
+      <nav>
         <Link
           className={styles.link_boton}
           to={categoryList?.length !== 0 ? "/admin/products/create" : ""}

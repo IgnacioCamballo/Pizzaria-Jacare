@@ -40,14 +40,13 @@
 .popover_panel, .popover_panel_menu {
     display: flex; 
     position: absolute; 
-    top: 2.8rem;
-    right: 0rem;
+    top: 3.7rem;
+    right: 2rem;
     z-index: 1; 
     width: 11rem; 
 }
 .popover_panel_menu {
-    top: 2.2rem;
-    right: 1rem;
+    top: 3.3rem;
     width: max-content;
 }
 

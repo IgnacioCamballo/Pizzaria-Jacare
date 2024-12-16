@@ -5,11 +5,18 @@ import 'react-toastify/dist/ReactToastify.css'
 import { useAuth } from "../hooks/useAuth"
 import NavMenu from "../components/admin/NavMenu"
 import styles from "../styles/layouts/AdminLayout.module.css"
+import Loader from "../components/admin/Loader"
 
 export default function AdminLayout() {
   const {data, isError, isLoading} = useAuth()
 
-  if(isLoading) return "Cargando..."
+  if(isLoading) return (
+    <>
+      <div className={styles.blue_top}/>
+      <Loader />
+    </>
+  )
+
   if(isError) {
     return <Navigate to={"/login"}/>
   }

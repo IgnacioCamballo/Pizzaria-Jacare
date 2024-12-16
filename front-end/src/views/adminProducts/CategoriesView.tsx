@@ -13,6 +13,7 @@ import useMenu from "../../hooks/useMenu";
 import CategoryModal from "../../components/admin/CategoryModal";
 import AlertModal from "../../components/admin/AlertModal";
 import CategoryItem from "../../components/admin/CategoryItem";
+import Loader from "../../components/admin/Loader";
 
 export default function CategoriesView() {
   const {pizza} = useMenu()
@@ -158,7 +159,7 @@ export default function CategoriesView() {
     setCatEditingId("")
   }
 
-  if (isLoading) return "Cargando..."
+  if (isLoading) return <Loader />
 
   if (data) return (
     <div className={styles.container}>

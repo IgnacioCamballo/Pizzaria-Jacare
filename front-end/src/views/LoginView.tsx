@@ -1,15 +1,19 @@
-import styles from "@/styles/views/LoginView.module.css"
 import { FormEvent, useState } from "react"
-import ErrorMessage from "../components/admin/ErrorMessage"
 import { useMutation } from "@tanstack/react-query"
-import { authenticateUser } from "../api/UserAPI"
-import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
+
+import styles from "@/styles/views/LoginView.module.css"
+import { authenticateUser } from "../api/UserAPI"
+
+import ErrorMessage from "../components/admin/ErrorMessage"
+import EyePass from "../components/svg/EyePass"
 
 export default function LoginView() {
   const [name, setname] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
 
   const navigate = useNavigate()
 
@@ -67,11 +71,15 @@ export default function LoginView() {
         <input
           id="contraseña"
           className={styles.input}
-          type="password"
+          type={isVisible? "text" : "password"}
           placeholder="Contraseña"
           value={password}
           onChange={(e) => {setPassword(e.target.value)}}
         />
+
+        <div className={styles.pass_eye} onClick={() => setIsVisible(!isVisible)}>
+          <EyePass width={20} height={20} isVisible={isVisible} />
+        </div>
 
         {error && password === "" && (
           <ErrorMessage>El nombre es obligatorio</ErrorMessage>

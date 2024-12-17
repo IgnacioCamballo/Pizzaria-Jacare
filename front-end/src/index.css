@@ -45,10 +45,11 @@ body {
 }
 
 .logo {
-  height: 160px;
+  height: 120px;
   position: absolute;
-  top: 5%;
-  left: 5%;
+  top: 3%;
+  left: 3%;
+  opacity: 0.8;
 }
 
 .titulo {
@@ -467,10 +468,6 @@ body {
   color: #df9930;
 }
 
-.marginB0 {
-  margin-bottom: -1rem;
-}
-
 .tamaño{
   display: flex;
   width: max-content;
@@ -607,6 +604,7 @@ body {
   font-size: medium;
   font-weight: bold;
   margin: 0px;
+  margin-bottom: 0.5rem;
   padding: 0px;
 }
 

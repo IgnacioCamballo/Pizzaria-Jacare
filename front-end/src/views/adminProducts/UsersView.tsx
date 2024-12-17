@@ -46,6 +46,16 @@ export default function UsersView() {
     }
   })
 
+  const handleEditUser = (user: AuthUser) => {
+    if(user._id === firstUser && userID !== firstUser) {
+      toast.error("Acción no permitida")
+      return
+    }
+
+    queryClient.removeQueries({ queryKey: ["CurrentFullUser"] })
+    navigate(`/users/${userID}/editUser/${user._id}`)
+  }
+
   const handleDeleteUser = () => {
     const {mutate} = deleteUser
     
@@ -72,7 +82,7 @@ export default function UsersView() {
             <UserItem 
               key={user._id} 
               user={user} 
-              editUser={() => {navigate(`/users/${userID}/editUser/${user._id}`)}}
+              editUser={() => handleEditUser(user)}
               deleteUser={() => {setAlertModal(true), setEditingUser(user)}}  
             />
           )}

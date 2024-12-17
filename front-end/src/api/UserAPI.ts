@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "../lib/axios";
-import { User, userAuthSchema, UserFormData, usersAuthSchema } from "../types/usersTypes";
+import { FullUser, User, userAuthSchema, UserFormData, usersAuthSchema } from "../types/usersTypes";
 
 export async function createUser(formData: User) {
   try {
@@ -57,6 +57,43 @@ export async function getAllUsers() {
     if(response.success) {
       return response.data
     }
+  } catch (error) {
+    if(isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error)
+    }
+  }
+}
+
+export async function getUserById(currentId: FullUser["_id"]) {
+  try {
+    const {data} = await api(`/auth/current/${currentId}`)
+
+    const response = userAuthSchema.safeParse(data)
+    if(response.success) {
+      return response.data
+    }
+  } catch (error) {
+    if(isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error)
+    }
+  }
+}
+
+type updateUserProps = {
+  formData: {name: string, password?: string, rank: number, isPass: boolean}
+  id: string
+}
+
+export async function UpdateUser(formDataId: updateUserProps) {
+  const token = sessionStorage.getItem("AUTH_TOKEN")
+  
+  try {
+    const {data} = await api.put(`/auth/${formDataId.id}`, formDataId.formData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return data
   } catch (error) {
     if(isAxiosError(error) && error.response) {
       throw new Error(error.response.data.error)

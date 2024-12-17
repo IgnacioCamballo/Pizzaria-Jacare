@@ -9,7 +9,7 @@ import { Category } from "../types/categoriesTypes"
 import Producto from "./Producto"
 
 const Menu = () => {
-  const {pizza, menu, setMenu, delivery, setDelivery} = useMenu()
+  const { menu, setMenu, delivery, setDelivery} = useMenu()
   const [sortedCategories, setSortedCategories] = useState<Category[]>([])
   const [CategoryList, setCategoryList] = useState<Category[]>([])
 
@@ -74,7 +74,7 @@ const Menu = () => {
 
       {sortedCategories.map(category => (menu === category._id || "Tudo") && (
         <div key={category._id} className="general_products_container">
-          <div className={`titulo_submenuCat ${category._id === pizza && "marginB0"}`}>{category.name}</div>
+          <div className="titulo_submenuCat">{category.name}</div>
 
           <div className="contenedor_productos_mostrados">
             {category.products.filter(product => !product.subcategory).sort((a, b) => a.idNumber - b.idNumber).map(product => (

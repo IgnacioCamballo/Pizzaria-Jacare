@@ -19,3 +19,6 @@ export const userAuthSchema = userSchema.pick({
 export const usersAuthSchema = z.array(userAuthSchema)
 
 export type AuthUser = z.infer<typeof userAuthSchema>
+
+export const fullUserSchema = userSchema.extend({_id: z.string()})
+export type FullUser = z.infer<typeof fullUserSchema>

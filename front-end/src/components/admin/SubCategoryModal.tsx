@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react"
 
 import styles from "@/styles/views/CategoriesView.module.css"
-import useMenu from "../../hooks/useMenu";
 
 import Modal from "../Modal"
 import { SubCategory } from "../../types/subCategoriesTypes";

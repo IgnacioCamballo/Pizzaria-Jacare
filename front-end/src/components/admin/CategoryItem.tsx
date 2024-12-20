@@ -4,7 +4,6 @@ import { ReactSortable, Sortable } from "react-sortablejs";
 import { toast } from "react-toastify";
 
 import styles from "@/styles/views/CategoriesView.module.css"
-import useMenu from "../../hooks/useMenu";
 import { Category } from "../../types/categoriesTypes";
 import { createSubCategory, updateSubCategory, deleteSubCategory } from "../../api/SubCategoryAPI";
 import { SubCategory, SubCategoryData } from "../../types/subCategoriesTypes";

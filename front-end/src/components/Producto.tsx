@@ -4,6 +4,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
 import { AdvancedImage, lazyload } from '@cloudinary/react';
 import { fill } from '@cloudinary/url-gen/actions/resize';
+import VeggySVG from "./svg/VeggySVG";
 
 const Producto = ({ producto }: { producto: Product}) => {
   const { pizza, handleChangeModal, setProductoActual, delivery, multisabor, setAlertPizza } = useMenu()
@@ -37,7 +38,7 @@ const Producto = ({ producto }: { producto: Product}) => {
       </div>
 
       <div className="texto_producto">
-        <p className="titulo_producto">{producto.name}</p>
+        <p className="titulo_producto">{producto.name} {producto.veggy && <VeggySVG/>}</p>
 
         {producto.ingredients && 
           <div className="contenedor_ingredientes">

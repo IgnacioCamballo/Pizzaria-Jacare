@@ -7,6 +7,7 @@ import { fill } from '@cloudinary/url-gen/actions/resize';
 
 import styles from "@/styles/views/AdminView.module.css"
 import { Product } from '../../types/types'
+import VeggySVG from '../svg/VeggySVG';
 
 type ProductItemProps = {
   product: Product,
@@ -34,7 +35,7 @@ export default function ProductItem({ product, setDeletingItem, setAlertModal }:
 
         <div className={styles.contenedor_info}>
           <Link to={`/admin/products/${product._id}/edit`} className={styles.nombre_producto}>
-            {product.idNumber !== 0 ? `${product.idNumber}. ` : ""}{product.name}
+            {product.idNumber !== 0 ? `${product.idNumber}. ` : ""}{`${product.name} `}{product.veggy && <VeggySVG/>}
           </Link>
           
           {product.ingredients && <p className={styles.text_info}><span className={styles.span}>Ingredientes: </span>{product.ingredients}</p>}

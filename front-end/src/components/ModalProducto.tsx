@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import useMenu from "../hooks/useMenu"
 import { Cloudinary } from '@cloudinary/url-gen';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';

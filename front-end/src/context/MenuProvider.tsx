@@ -2,7 +2,6 @@ import { useState, createContext, useEffect } from "react"
 import { toast } from "react-toastify"
 
 import { item, MenuContextProps, Product } from "../types/types"
-import { User } from "../types/usersTypes"
 
 interface props {
   children: JSX.Element | JSX.Element[]
@@ -12,6 +11,7 @@ const MenuContext = createContext<MenuContextProps>({} as MenuContextProps)
 
 const MenuProvider = ({ children }: props) => {
   const pizza = "674f750add362637b281687d"
+  const empanadas = "676189428ba5e4b08cdfcae4"
 
   const [menu, setMenu] = useState("Tudo")
   const [desplegable, setDesplegable] = useState(false)
@@ -23,9 +23,7 @@ const MenuProvider = ({ children }: props) => {
   const [multisabor, setMultisabor] = useState(false)
   const [delivery, setDelivery] = useState(false)
   const [carrito, setCarrito] = useState(false)
-  const [tamaño, setTamaño] = useState("")
   const [sabores, setSabores] = useState(1)
-  const [precio, setPrecio] = useState(0)
   const [total, setTotal] = useState(0)
   const [guardando, setGuardando] = useState(false)
   const [alertPizza, setAlertPizza] = useState(false)
@@ -36,15 +34,7 @@ const MenuProvider = ({ children }: props) => {
 
   const handleCerrarModal = () => {
     setModal(false)
-    setTamaño("Grande")
     setSabores(1)
-    setPrecio(0)
-    setProductoActual({} as Product)
-  }
-
-  const handleCerrarModalParcial = () => {
-    setModal(false)
-    setPrecio(0)
     setProductoActual({} as Product)
   }
 
@@ -61,15 +51,6 @@ const MenuProvider = ({ children }: props) => {
     obtenerPedido()
   }, [])
 
-  useEffect(() => {
-    if(productoActual.category === pizza) {
-      if(tamaño === "Grande") {setPrecio(productoActual.price)}
-      if(tamaño === "Media") {setPrecio(productoActual.price2!)}
-    } else {
-      setPrecio(productoActual.price)
-    }
-  }, [productoActual, tamaño])
-
   const handleAgregarItem = (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
@@ -78,80 +59,57 @@ const MenuProvider = ({ children }: props) => {
       _id: productoActual._id,
       categoria: productoActual.category,
       cantidad: 1,
-      tamaño: tamaño,
       sabores: sabores,
-      sabor1: productoActual.name,
+      sabor1: productoActual.subcategory === empanadas ? `Empanada do ${productoActual.name}`: productoActual.category === pizza ? `Pizza ${productoActual.name}`: productoActual.name,
       sabor2: "",
-      sabor3: "",
-      precio: precio
+      precio: productoActual.price
+    }
+    
+    //Checks if a single item is repeted and updates if true, or direct push into order if not repeated
+    const checkRepeatedAndPush = (itemToCheck: item) => {
+      //ver repetido
+      if (pedidoNuevo.some(itemPedido => itemPedido._id === itemToCheck._id)) {
+        const index = pedidoNuevo.findIndex(itemNuevo => itemNuevo._id === itemToCheck._id)
+        const itemRepetido = pedidoNuevo[index]
+        const itemSumado = {
+          ...itemRepetido,
+          cantidad: itemRepetido.cantidad + 1
+        }
+        pedidoNuevo.splice(index, 1, itemSumado)
+      } else {
+        pedidoNuevo.push(itemToCheck)
+      }
+      localStorage.setItem('pedido', JSON.stringify(pedidoNuevo))
+      handleCerrarModal()
+      toast.success("item adicionado com sucesso")
     }
 
     if (multisabor === false) {
       if (sabores === 1) {
-        //ver repetido
-        if (pedidoNuevo.some(item => item._id === productoActual._id && item.sabores === 1)) {
-          const index = pedidoNuevo.findIndex(item => item._id === productoActual._id && item.sabores === 1)
-          const itemRepetido = pedidoNuevo[index]
-          const itemSumado = {
-            ...itemRepetido,
-            cantidad: itemRepetido.cantidad + 1
-          }
-          pedidoNuevo.splice(index, 1, itemSumado)
-          localStorage.setItem('pedido', JSON.stringify(pedidoNuevo))
-          handleCerrarModal()
-          toast.success("item adicionado com sucesso")
-        } else {
-          pedidoNuevo.push(item)
-          localStorage.setItem('pedido', JSON.stringify(pedidoNuevo))
-          handleCerrarModal()
-          toast.success("item adicionado com sucesso")
-        }
+        checkRepeatedAndPush(item)
       } else {
         setMultisabor(true)
         setPizzaIncompleta(item)
-        handleCerrarModalParcial()
+        setModal(false)
+        setProductoActual({} as Product)
         toast.success("primeiro sabor selecionado")
       }
     } else {
-      if (pizzaIncompleta.sabores === 2) {
+      if (pizzaIncompleta.sabor1 === productoActual.name) {
+        checkRepeatedAndPush(item)
+      } else {
         const pizzaCompleta = {
           ...pizzaIncompleta,
-          sabor2: productoActual.name,
-          precio: (pizzaIncompleta.precio > precio ? pizzaIncompleta.precio : precio),
-          id: pizzaIncompleta._id + productoActual._id
+          sabor2: ` / ${productoActual.name}`,
+          precio: (pizzaIncompleta.precio > productoActual.price ? pizzaIncompleta.precio : productoActual.price),
+          _id: `${pizzaIncompleta._id}${productoActual._id}`
         }
-        pedidoNuevo.push(pizzaCompleta)
-        localStorage.setItem('pedido', JSON.stringify(pedidoNuevo))
-        setMultisabor(false)
-        setPizzaIncompleta({} as item)
-        handleCerrarModal()
-        toast.success("segundo sabor selecionado e item adicionado com sucesso")
-      } else {
-        if (pizzaIncompleta.sabor2 === "") {
-          const pizza2de3 = {
-            ...pizzaIncompleta,
-            sabor2: productoActual.name,
-            precio: (pizzaIncompleta.precio > precio ? pizzaIncompleta.precio : precio),
-            id: pizzaIncompleta._id + productoActual._id
-          }
-          setPizzaIncompleta(pizza2de3)
-          handleCerrarModal()
-          toast.success("segundo sabor selecionado")
-        } else {
-          const pizza3sabores = {
-            ...pizzaIncompleta,
-            sabor3: productoActual.name,
-            precio: (pizzaIncompleta.precio > precio ? pizzaIncompleta.precio : precio),
-            id: pizzaIncompleta._id + productoActual._id
-          }
-          pedidoNuevo.push(pizza3sabores)
-          localStorage.setItem('pedido', JSON.stringify(pedidoNuevo))
-          setMultisabor(false)
-          setPizzaIncompleta({} as item)
-          handleCerrarModal()
-          toast.success("terceiro sabor selecionado e item adicionado com sucesso")
-        }
-      }
+        checkRepeatedAndPush(pizzaCompleta)
+      } 
+      setMultisabor(false)
+      setPizzaIncompleta({} as item)
+      handleCerrarModal()
+      toast.success("segundo sabor selecionado e item adicionado com sucesso")
     }
   }
 
@@ -204,36 +162,15 @@ const MenuProvider = ({ children }: props) => {
   const handleRealizarPedido = () => {
     const numero = "+554792378248"
     let mensaje = ""
-    mensaje += `Pedido do web: \n`;
+    mensaje += `Pedido do web:  \n`;
     const copiaPedido: item[] = pedido
 
     for (const item of copiaPedido) {
       const itemCantidad = item.cantidad;
-      const itemCategoria = item.categoria;
-      const itemNombre = item.sabor1;
+      const itemNombre = item.sabor2 !== "" ? `${item.sabor1} ${item.sabor2}` : item.sabor1;
 
-      if (itemCategoria === "pizzas") {
-        const itemTamaño = item.tamaño;
-        const itemSabores = item.sabores;
-
-        mensaje += `${itemCantidad} Pizza ${itemTamaño}\n `;
-        mensaje += `Sabor: \n`;
-
-        for (let i = 1; i <= itemSabores; i++) {
-          const sabor = item[`sabor${i}` as keyof item];
-          mensaje += `-${sabor} \n`;
-        }
-
-        mensaje += "\n";
-      }
-
-      else if (itemCategoria === "pratos") {
-        mensaje += `${itemCantidad} Prato \n`;
-        mensaje += `${itemNombre}\n`;
-      } else {
-        mensaje += `${itemCantidad} Bebida \n`;
-        mensaje += `${itemNombre}\n`;
-      }
+      mensaje += `${itemCantidad} \n`;
+      mensaje += `${itemNombre},  \n`;
     }
     mensaje += `Total do pedido = R$${total}`
 
@@ -263,7 +200,6 @@ const MenuProvider = ({ children }: props) => {
         multisabor,
         delivery,
         carrito,
-        tamaño,
         sabores,
         total,
         alertPizza,
@@ -273,9 +209,7 @@ const MenuProvider = ({ children }: props) => {
         setProductoActual,
         setDelivery,
         setCarrito,
-        setTamaño,
         setSabores,
-        setPrecio,
         setAlertPizza,
         handleAgregarItem,
         handleEliminarItem,

@@ -622,6 +622,12 @@ body {
   gap: 20px;
 }
 
+@media (max-width: 765px) {
+  .contenedor_productos_mostrados {
+    justify-content: center;
+  }
+}
+
 .contenedor_contacto {
   background-color: #DBA24A;
   padding:0px;

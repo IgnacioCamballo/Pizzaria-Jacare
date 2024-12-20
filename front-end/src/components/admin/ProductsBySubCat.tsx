@@ -26,9 +26,12 @@ export default function ProductsBySubCat({ category, setAlertModal, setDeletingI
   if (subCategoryList.length) {
     return (
       <div className={styles.subCat_list}>
+
+        <div className={styles.listado_productos}>
         {productsData.filter(product => !product.subcategory).map(product => 
           <ProductItem product={product} setAlertModal={setAlertModal} setDeletingItem={setDeletingItem} key={product._id} />
         ) }
+        </div>
         
         {subCategoryList.map(subcat =>
           <div key={subcat._id}>

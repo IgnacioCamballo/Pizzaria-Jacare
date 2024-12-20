@@ -31,6 +31,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
   const [productId] = useState<Product["_id"]>(isCreate ? "" : editingData!._id)
   const [idNumber, setIdNumber] = useState<ProductForm["idNumber"]>(isCreate ? 0 : editingData!.idNumber)
   const [name, setName] = useState<ProductForm["name"]>(isCreate ? "" : editingData!.name)
+  const [veggy, setVeggy] = useState<ProductForm["veggy"]>(isCreate ? false : editingData?.veggy || false)
   const [category, setCategory] = useState<ProductForm["category"]>(isCreate ? "" : editingData!.category)
   const [subcategory, setSubcategory] = useState<ProductForm["subcategory"]>(isCreate ? "" : editingData?.subcategory)
   const [ingredients, setIngredients] = useState<ProductForm["ingredients"]>(isCreate ? "" : editingData?.ingredients)
@@ -122,6 +123,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
         const formData = {
           idNumber,
           name,
+          veggy,
           category,
           subcategory: subcategory === "" ? null : subcategory,
           ingredients,
@@ -145,6 +147,7 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
       const formData = {
         idNumber,
         name,
+        veggy,
         category,
         subcategory: subcategory === "" ? null : subcategory,
         ingredients,
@@ -185,6 +188,21 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
         {error && name === "" && (
           <ErrorMessage>El nombre es obligatorio</ErrorMessage>
         )}
+      </div>
+
+      <div className={styles.contenedor_checkbox}>
+        <label htmlFor="checkbox" className={styles.label}>
+          Vegetariano
+        </label>
+        <input
+          id="checkbox"
+          checked={veggy}
+          className={styles.checkbox}
+          type="checkbox"
+          onChange={(e) => setVeggy(e.target.checked)}
+        />
+        <div className={styles.message_checkbox}>Marcar si el plato es vegetariano</div>
+
       </div>
 
       <div className={styles.contenedor_label_input}>
@@ -237,19 +255,19 @@ export default function ProductsForm({ mutateCreate, mutateUpdate, editingData, 
         </div>
       )}
 
-        <div className={styles.contenedor_label_input}>
-          <label htmlFor="ingredients" className={styles.label}>
-            Ingredientes
-          </label>
-          <input
-            id="ingredients"
-            className={styles.input}
-            type="text"
-            placeholder="Ingredientes"
-            value={ingredients}
-            onChange={(e) => setIngredients(e.target.value)}
-          />
-        </div>
+      <div className={styles.contenedor_label_input}>
+        <label htmlFor="ingredients" className={styles.label}>
+          Ingredientes
+        </label>
+        <input
+          id="ingredients"
+          className={styles.input}
+          type="text"
+          placeholder="Ingredientes"
+          value={ingredients}
+          onChange={(e) => setIngredients(e.target.value)}
+        />
+      </div>
 
       <div className={styles.contenedor_label_input}>
         <label htmlFor="price" className={styles.label}>

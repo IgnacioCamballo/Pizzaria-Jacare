@@ -80,6 +80,14 @@
   gap: 0.5rem;
 }
 
+.contenedor_checkbox {
+  position: relative;
+  display: flex;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+  justify-content: left;
+}
+
 .label {
   font-size: medium;
   line-height: 1rem;
@@ -90,6 +98,10 @@
 .message_small_letter {
   font-size: small;
   margin-block: -0.4rem;
+}
+
+.message_checkbox {
+  font-size: small;
 }
 
 .input {

@@ -131,6 +131,7 @@
 }
 
 .contenedor_info {
+    position: relative  ;
     display: flex; 
     justify-self: left;
     flex-direction: column;
@@ -145,7 +146,7 @@
     line-height: 1.5rem; 
     font-weight: 700; 
     color: black; 
-    cursor: pointer; 
+    cursor: pointer;
 }
 
 .nombre_producto:hover {
@@ -195,6 +196,21 @@
         flex-direction: row;
         margin-top: 1rem;
         margin-left: 0rem;
+    }
+
+    .leftCont {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+     .foto {
+        margin-top: 0.5rem;
+    }
+
+    .price {
+        position: absolute;
+        bottom: -6rem;
+        left: 7rem;
     }
 }
 

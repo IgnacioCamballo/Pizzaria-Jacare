@@ -91,36 +91,6 @@ const Menu = () => {
           ))}
         </div>
       ))}
-
-
-
-
-
-      {/* {(menu === "Pizza" || menu === "Tudo") && (
-        <>
-          {precios.map(precio => (
-            <Submenu 
-              key={precio.categoria} 
-              categoria={precio.categoria} 
-              precioGrande={precio.precioGrande} 
-              precioMedia={precio.precioMedia}
-            />
-          ))}
-        </>
-      )}
-
-      {(multisabor === false && (menu === "Prato" || menu === "Tudo")) && (
-        <Submenu categoria={"Pratos"} precioGrande={0} precioMedia={0}/>
-      )}
-
-      {(multisabor === false && (menu === "Bebidas" || menu === "Tudo")) && (
-        <>
-          <Submenu categoria={"Refri"} precioGrande={0} precioMedia={0}/>
-          <Submenu categoria={"Cervejas"} precioGrande={0} precioMedia={0}/>
-          <Submenu categoria={"Aguas"} precioGrande={0} precioMedia={0}/>
-        </>
-      )}
-       */}
     </section>
   )
 }
